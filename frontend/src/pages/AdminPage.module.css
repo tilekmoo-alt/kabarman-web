@@ -1,0 +1,99 @@
+/* Login */
+.loginWrap {
+  min-height: 100vh; display: flex;
+  align-items: center; justify-content: center;
+  background: var(--gray-light);
+}
+.loginBox {
+  background: white; border-radius: 20px;
+  padding: 40px; width: 100%; max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+.loginLogo {
+  font-family: var(--font-head); font-size: 20px;
+  font-weight: 800; color: var(--green); margin-bottom: 8px;
+}
+.loginBox h2 { font-size: 20px; margin-bottom: 24px; color: var(--dark); }
+.loginForm { display: flex; flex-direction: column; gap: 12px; }
+.error {
+  background: #FEF2F2; border: 1px solid #FECACA;
+  color: #DC2626; padding: 10px 14px;
+  border-radius: 8px; font-size: 14px; margin-bottom: 8px;
+}
+
+/* Dashboard */
+.dash { min-height: 100vh; background: var(--gray-light); }
+.dashHeader {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dashLogo { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--green); }
+
+.tabs {
+  display: flex; gap: 4px; padding: 24px 0 16px;
+}
+.tab {
+  padding: 8px 20px; border-radius: 8px;
+  background: transparent; border: none;
+  font-size: 14px; font-weight: 500; color: var(--gray);
+}
+.tab:hover { background: white; }
+.tabActive {
+  padding: 8px 20px; border-radius: 8px;
+  background: white; border: none; box-shadow: var(--shadow);
+  font-size: 14px; font-weight: 600; color: var(--green);
+}
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #DC2626; color: white;
+  width: 20px; height: 20px; border-radius: 50%;
+  font-size: 11px; font-weight: 700; margin-left: 6px;
+}
+
+/* Stats */
+.statsGrid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px; margin-bottom: 24px;
+}
+.statCard {
+  background: white; border-radius: var(--radius-lg);
+  padding: 24px; text-align: center;
+}
+.statNum { font-family: var(--font-head); font-size: 36px; font-weight: 800; color: var(--green); }
+.statLabel { font-size: 13px; color: var(--gray); margin-top: 4px; }
+
+.districtStats {
+  grid-column: 1 / -1;
+  background: white; border-radius: var(--radius-lg); padding: 24px;
+}
+.districtStats h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.districtRow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.districtCount { font-weight: 700; color: var(--green); }
+
+/* Pending */
+.pendingList { display: flex; flex-direction: column; gap: 12px; padding-bottom: 40px; }
+.pendingCard {
+  background: white; border-radius: var(--radius-lg);
+  padding: 20px; border: 1px solid var(--border);
+}
+.pendingHead {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; gap: 16px; margin-bottom: 12px;
+}
+.pendingName { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.pendingMeta { display: flex; gap: 6px; }
+.pendingActions { display: flex; gap: 8px; flex-shrink: 0; }
+.pendingDetails { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--gray); }
+.pendingDate { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+
+.empty { text-align: center; padding: 60px; color: var(--gray); font-size: 16px; }
+
+@media (max-width: 768px) {
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .pendingHead { flex-direction: column; }
+}

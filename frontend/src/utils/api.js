@@ -1,0 +1,30 @@
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || '/api',
+  timeout: 15000
+})
+
+api.interceptors.request.use(cfg => {
+  const token = localStorage.getItem('kabarman_admin_token')
+  if (token) cfg.headers.Authorization = `Bearer ${token}`
+  return cfg
+})
+
+export const catalogApi = {
+  getProviders: (params) => api.get('/providers', { params }),
+  getCategories: () => api.get('/categories'),
+  getDistricts:  () => api.get('/districts'),
+  register:      (data) => api.post('/providers', data)
+}
+
+export const adminApi = {
+  login:       (data)  => api.post('/admin/login', data),
+  getStats:    ()      => api.get('/admin/stats'),
+  getPending:  ()      => api.get('/admin/pending'),
+  approve:     (id)    => api.patch(`/providers/${id}/approve`),
+  reject:      (id)    => api.patch(`/providers/${id}/reject`),
+  delete:      (id)    => api.delete(`/providers/${id}`)
+}
+
+export default api

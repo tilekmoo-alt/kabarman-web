@@ -1,0 +1,73 @@
+const router = require('express').Router()
+const pool = require('../db/pool')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const { authAdmin } = require('../middleware/auth')
+
+// GET /api/categories
+router.get('/categories', async (req, res) => {
+  const result = await pool.query('SELECT * FROM categories WHERE is_active=true ORDER BY sort_order')
+  res.json(result.rows)
+})
+
+// GET /api/districts
+router.get('/districts', async (req, res) => {
+  const result = await pool.query('SELECT * FROM districts WHERE is_active=true ORDER BY sort_order')
+  res.json(result.rows)
+})
+
+// POST /api/admin/login
+router.post('/admin/login', async (req, res) => {
+  try {
+    const { username, password } = req.body
+    const adminUser = process.env.ADMIN_USERNAME || 'admin'
+    const adminPass = process.env.ADMIN_PASSWORD || 'kabarman2025'
+
+    if (username !== adminUser || password !== adminPass) {
+      return res.status(401).json({ error: 'Неверный логин или пароль' })
+    }
+
+    const token = jwt.sign({ role: 'admin', username }, process.env.JWT_SECRET, { expiresIn: '7d' })
+    res.json({ token })
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка сервера' })
+  }
+})
+
+// GET /api/admin/stats
+router.get('/admin/stats', authAdmin, async (req, res) => {
+  const [active, pending, clients, searches] = await Promise.all([
+    pool.query('SELECT COUNT(*) FROM providers WHERE is_approved=true AND is_active=true'),
+    pool.query('SELECT COUNT(*) FROM providers WHERE is_approved=false AND is_active=true'),
+    pool.query('SELECT COUNT(*) FROM clients'),
+    pool.query('SELECT COUNT(*) FROM searches')
+  ])
+  const byDistrict = await pool.query(`
+    SELECT d.name, COUNT(p.id) AS cnt
+    FROM districts d
+    LEFT JOIN providers p ON p.district_id=d.id AND p.is_approved=true AND p.is_active=true
+    GROUP BY d.id, d.name ORDER BY d.sort_order
+  `)
+  res.json({
+    active: parseInt(active.rows[0].count),
+    pending: parseInt(pending.rows[0].count),
+    clients: parseInt(clients.rows[0].count),
+    searches: parseInt(searches.rows[0].count),
+    by_district: byDistrict.rows
+  })
+})
+
+// GET /api/admin/pending
+router.get('/admin/pending', authAdmin, async (req, res) => {
+  const result = await pool.query(`
+    SELECT p.*, c.name AS category, c.emoji, d.name AS district
+    FROM providers p
+    JOIN categories c ON p.category_id=c.id
+    JOIN districts d ON p.district_id=d.id
+    WHERE p.is_approved=false AND p.is_active=true
+    ORDER BY p.created_at DESC
+  `)
+  res.json(result.rows)
+})
+
+module.exports = router
