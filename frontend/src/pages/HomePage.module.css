@@ -28,9 +28,9 @@
 }
 
 .heroActions .btn-outline {
-  color: var(--green);
-  border-color: white;
-  background: white;
+  color: white;
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.08);
 }
 .heroContent { flex: 1; }
 .heroTag {
