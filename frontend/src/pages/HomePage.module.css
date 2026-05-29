@@ -44,8 +44,9 @@
 .heroLogo { flex: 0 0 240px; display: flex; justify-content: center; }
 .heroLogoImg {
   width: 200px; height: 200px; object-fit: contain;
-  filter: invert(1) opacity(0.25);
+  opacity: 0.15;
   animation: float 6s ease-in-out infinite;
+  pointer-events: none;
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
