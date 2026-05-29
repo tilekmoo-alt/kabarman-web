@@ -1,0 +1,86 @@
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.main { flex: 1; }
+
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+.headerInner {
+  display: flex; align-items: center; gap: 32px;
+  height: 68px;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-head);
+  font-size: 20px; font-weight: 800;
+  color: var(--dark); letter-spacing: -0.5px;
+  text-decoration: none;
+}
+.logoImg {
+  height: 38px; width: auto;
+  filter: brightness(0);
+}
+
+.nav { display: flex; gap: 4px; flex: 1; }
+.nav a {
+  padding: 8px 18px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; color: var(--gray);
+  transition: all 0.15s; text-decoration: none;
+}
+.nav a:hover { background: var(--green-pale); color: var(--green); }
+.nav a.active { background: var(--green-pale); color: var(--green); font-weight: 600; }
+
+.tgBtn { margin-left: auto; white-space: nowrap; }
+
+/* Footer */
+.footer {
+  background: #141A17;
+  color: rgba(255,255,255,0.65);
+  padding: 56px 0 28px;
+  margin-top: 80px;
+}
+.footerInner {
+  display: grid; grid-template-columns: 1fr 2fr;
+  gap: 48px; margin-bottom: 36px;
+}
+.footerBrand p { font-size: 14px; line-height: 1.8; margin-top: 12px; }
+.footerLogo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-head); font-size: 20px;
+  font-weight: 800; color: white;
+}
+.footerLogoImg {
+  height: 36px; width: auto;
+  filter: brightness(0) invert(1);
+}
+.footerLinks {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.footerCol { display: flex; flex-direction: column; gap: 10px; }
+.footerTitle {
+  font-weight: 600; color: white;
+  font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 4px;
+}
+.footerCol a, .footerCol span {
+  font-size: 14px; color: rgba(255,255,255,0.55);
+  text-decoration: none;
+}
+.footerCol a:hover { color: white; }
+.footerBottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 24px;
+  font-size: 13px; text-align: center;
+  color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .footerInner { grid-template-columns: 1fr; gap: 24px; }
+  .footerLinks { grid-template-columns: 1fr 1fr; }
+  .tgBtn { font-size: 12px; padding: 8px 12px; }
+}
