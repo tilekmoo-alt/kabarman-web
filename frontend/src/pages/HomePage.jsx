@@ -32,7 +32,7 @@ export default function HomePage() {
               <Link to="/catalog" className="btn btn-primary">
                 🔍 Найти услугу
               </Link>
-              <Link to="/register" className="btn btn-outline">
+              <Link to="/register" className="btn btn-outline" style={{color:'white', borderColor:'rgba(255,255,255,0.5)'}}>
                 📋 Добавить бизнес
               </Link>
             </div>
