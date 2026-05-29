@@ -21,8 +21,7 @@
 }
 .logoImg {
   height: 38px; width: auto;
-  filter: brightness(0) saturate(100%);
-  background: transparent;
+  mix-blend-mode: multiply;
 }
 
 .nav { display: flex; gap: 4px; flex: 1; }
