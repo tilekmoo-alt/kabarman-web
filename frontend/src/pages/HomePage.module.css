@@ -41,7 +41,11 @@
 }
 .heroActions .btn-outline:hover { background: rgba(255,255,255,0.15); }
 
-.heroLogo { flex: 0 0 240px; display: flex; justify-content: center; }
+.heroLogo {
+  flex: 0 0 240px; display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
 .heroLogoImg {
   width: 200px; height: 200px; object-fit: contain;
   opacity: 0.15;
