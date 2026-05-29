@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { catalogApi } from './utils/api'
 import Layout from './components/layout/Layout'
 import HomePage from './pages/HomePage'
