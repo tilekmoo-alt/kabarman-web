@@ -21,7 +21,8 @@
 }
 .logoImg {
   height: 38px; width: auto;
-  filter: brightness(0);
+  filter: brightness(0) saturate(100%);
+  background: transparent;
 }
 
 .nav { display: flex; gap: 4px; flex: 1; }
