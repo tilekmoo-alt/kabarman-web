@@ -31,6 +31,7 @@
   color: var(--green);
   border-color: white;
   background: white;
+}
 .heroContent { flex: 1; }
 .heroTag {
   display: inline-block; background: rgba(255,255,255,0.12);
