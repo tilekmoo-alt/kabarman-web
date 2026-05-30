@@ -54,7 +54,8 @@
 }
 .footerLogoImg {
   height: 36px; width: auto;
-  filter: brightness(0) invert(1);
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 .footerLinks {
   display: grid; grid-template-columns: repeat(3, 1fr);
