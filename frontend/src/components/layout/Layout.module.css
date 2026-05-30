@@ -54,7 +54,6 @@
 }
 .footerLogoImg {
   height: 36px; width: auto;
-  filter: invert(1);
   mix-blend-mode: screen;
 }
 .footerLinks {
