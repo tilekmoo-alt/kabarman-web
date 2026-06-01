@@ -2,6 +2,40 @@ const router = require('express').Router()
 const pool = require('../db/pool')
 const { authAdmin } = require('../middleware/auth')
 
+async function notifyAdmins(providerId, p) {
+  const token = process.env.BOT_TOKEN
+  const adminIds = (process.env.ADMIN_IDS || '').split(',').map(s => s.trim()).filter(Boolean)
+  if (!token || !adminIds.length) return
+
+  const text =
+    `🌐 Новая заявка с сайта — Кабарман\n\n` +
+    `📁 ${p.category} · 📍 ${p.district}\n` +
+    `🏷️ ${p.name}\n` +
+    `📞 ${p.phone}\n` +
+    (p.description ? `📝 ${p.description}\n` : '') +
+    (p.address     ? `🏠 ${p.address}\n`     : '') +
+    (p.social_link ? `🔗 ${p.social_link}\n` : '') +
+    (p.tg_username ? `✈️ @${p.tg_username}\n` : '') +
+    `\nID: ${providerId}`
+
+  const keyboard = {
+    inline_keyboard: [[
+      { text: '✅ Одобрить', callback_data: `approve:${providerId}` },
+      { text: '❌ Отклонить', callback_data: `reject:${providerId}` }
+    ]]
+  }
+
+  for (const chatId of adminIds) {
+    try {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, reply_markup: keyboard })
+      })
+    } catch (_) {}
+  }
+}
+
 // GET /api/providers — каталог с фильтрами
 router.get('/', async (req, res) => {
   try {
@@ -80,10 +114,14 @@ router.post('/', async (req, res) => {
       socialUrl = `https://instagram.com/${socialUrl}`
     }
 
-    await pool.query(`
+    const ins = await pool.query(`
       INSERT INTO providers (tg_id, name, phone, category_id, district_id, description, address, social_link, tg_username, is_active, is_approved)
       VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8, true, false)
+      RETURNING id
     `, [name, phone, catQ.rows[0].id, distQ.rows[0].id, description, address, socialUrl, tg_username])
+
+    const providerId = ins.rows[0].id
+    await notifyAdmins(providerId, { name, phone, category, district, description, address, social_link: socialUrl, tg_username })
 
     res.status(201).json({ message: 'Заявка принята. Мы проверим и активируем в течение 24 часов.' })
   } catch (err) {
