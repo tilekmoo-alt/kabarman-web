@@ -81,8 +81,8 @@ router.post('/', async (req, res) => {
     }
 
     await pool.query(`
-      INSERT INTO providers (name, phone, category_id, district_id, description, address, social_link, tg_username, is_active, is_approved)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8, true, false)
+      INSERT INTO providers (tg_id, name, phone, category_id, district_id, description, address, social_link, tg_username, is_active, is_approved)
+      VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8, true, false)
     `, [name, phone, catQ.rows[0].id, distQ.rows[0].id, description, address, socialUrl, tg_username])
 
     res.status(201).json({ message: 'Заявка принята. Мы проверим и активируем в течение 24 часов.' })
