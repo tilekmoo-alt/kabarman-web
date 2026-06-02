@@ -1,5 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
+import InstallBanner from '../InstallBanner'
 
 export default function Layout() {
   const loc = useLocation()
@@ -27,6 +28,8 @@ export default function Layout() {
       <main className={styles.main}>
         <Outlet />
       </main>
+
+      <InstallBanner />
 
       <footer className={styles.footer}>
         <div className="container">
