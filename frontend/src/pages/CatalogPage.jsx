@@ -8,6 +8,10 @@ function ProviderCard({ p }) {
   const wa = `https://wa.me/${p.phone.replace(/\D/g, '')}?text=${encodeURIComponent('Здравствуйте! Нашёл вас на Кабарман.')}`
   const tg = p.tg_username ? `https://t.me/${p.tg_username}` : null
   const ig = p.social_link
+    ? p.social_link.startsWith('http')
+      ? p.social_link
+      : `https://instagram.com/${p.social_link.replace(/^@/, '')}`
+    : null
 
   const mapsAddr = encodeURIComponent(p.address || p.district)
   return (
