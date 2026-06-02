@@ -12,10 +12,12 @@ api.interceptors.request.use(cfg => {
 })
 
 export const catalogApi = {
-  getProviders: (params) => api.get('/providers', { params }),
-  getCategories: () => api.get('/categories'),
-  getDistricts:  () => api.get('/districts'),
-  register:      (data) => api.post('/providers', data)
+  getProviders:         (params)   => api.get('/providers', { params }),
+  getCategories:        ()         => api.get('/categories'),
+  getOblasts:           ()         => api.get('/oblasts'),
+  getDistricts:         ()         => api.get('/districts'),
+  getDistrictsByOblast: (oblastId) => api.get(`/districts?oblast_id=${oblastId}`),
+  register:             (data)     => api.post('/providers', data)
 }
 
 export const adminApi = {

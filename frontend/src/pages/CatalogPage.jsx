@@ -42,7 +42,7 @@ function ProviderCard({ p }) {
 }
 
 export default function CatalogPage() {
-  const { categories, districts } = useContext(AppContext)
+  const { categories, oblasts, districts } = useContext(AppContext)
   const [params, setParams] = useSearchParams()
   const [providers, setProviders] = useState([])
   const [total, setTotal]         = useState(0)
@@ -50,11 +50,17 @@ export default function CatalogPage() {
   const [q, setQ]                 = useState('')
 
   const category = params.get('category') || ''
+  const oblast   = params.get('oblast')   || ''
   const district = params.get('district') || ''
+
+  const filteredDistricts = oblast
+    ? districts.filter(d => String(d.oblast_id) === oblast)
+    : districts
 
   const setFilter = (key, val) => {
     const next = new URLSearchParams(params)
     if (val) next.set(key, val); else next.delete(key)
+    if (key === 'oblast') next.delete('district')
     setParams(next)
   }
 
@@ -81,11 +87,15 @@ export default function CatalogPage() {
             <option value="">Все категории</option>
             {categories.map(c => <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>)}
           </select>
+          <select value={oblast} onChange={e => setFilter('oblast', e.target.value)} className="form-select">
+            <option value="">Все области</option>
+            {oblasts.map(o => <option key={o.id} value={String(o.id)}>🗺 {o.name}</option>)}
+          </select>
           <select value={district} onChange={e => setFilter('district', e.target.value)} className="form-select">
             <option value="">Все районы</option>
-            {districts.map(d => <option key={d.id} value={d.name}>📍 {d.name}</option>)}
+            {filteredDistricts.map(d => <option key={d.id} value={d.name}>📍 {d.name}</option>)}
           </select>
-          {(category || district || q) && (
+          {(category || oblast || district || q) && (
             <button onClick={() => { setParams({}); setQ('') }} className="btn btn-outline btn-sm">
               ✕ Сбросить
             </button>

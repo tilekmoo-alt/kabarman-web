@@ -10,10 +10,25 @@ router.get('/categories', async (req, res) => {
   res.json(result.rows)
 })
 
-// GET /api/districts
-router.get('/districts', async (req, res) => {
-  const result = await pool.query('SELECT * FROM districts WHERE is_active=true ORDER BY sort_order')
+// GET /api/oblasts
+router.get('/oblasts', async (req, res) => {
+  const result = await pool.query('SELECT * FROM oblasts WHERE is_active=true ORDER BY sort_order')
   res.json(result.rows)
+})
+
+// GET /api/districts?oblast_id=X
+router.get('/districts', async (req, res) => {
+  const { oblast_id } = req.query
+  if (oblast_id) {
+    const result = await pool.query(
+      'SELECT * FROM districts WHERE is_active=true AND oblast_id=$1 ORDER BY sort_order',
+      [parseInt(oblast_id)]
+    )
+    res.json(result.rows)
+  } else {
+    const result = await pool.query('SELECT * FROM districts WHERE is_active=true ORDER BY sort_order')
+    res.json(result.rows)
+  }
 })
 
 // POST /api/admin/login

@@ -11,15 +11,17 @@ export const AppContext = React.createContext({})
 
 export default function App() {
   const [categories, setCategories] = useState([])
+  const [oblasts, setOblasts]       = useState([])
   const [districts, setDistricts]   = useState([])
 
   useEffect(() => {
     catalogApi.getCategories().then(r => setCategories(r.data)).catch(() => {})
+    catalogApi.getOblasts().then(r => setOblasts(r.data)).catch(() => {})
     catalogApi.getDistricts().then(r => setDistricts(r.data)).catch(() => {})
   }, [])
 
   return (
-    <AppContext.Provider value={{ categories, districts }}>
+    <AppContext.Provider value={{ categories, oblasts, districts }}>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/"          element={<HomePage />} />

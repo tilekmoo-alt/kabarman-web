@@ -3,27 +3,34 @@ import { catalogApi } from '../utils/api'
 import { AppContext } from '../App'
 import styles from './RegisterPage.module.css'
 
-const STEPS = ['Категория и район', 'Контакты', 'Описание']
+const STEPS = ['Категория', 'Регион', 'Контакты', 'Описание']
 
 export default function RegisterPage() {
-  const { categories, districts } = useContext(AppContext)
+  const { categories, oblasts, districts } = useContext(AppContext)
   const [step, setStep]   = useState(0)
   const [done, setDone]   = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const [form, setForm] = useState({
-    name: '', phone: '', category: '', district: '',
+    name: '', phone: '', category: '', oblast_id: '', district: '',
     description: '', address: '', social_link: '', tg_username: ''
   })
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
+  const filteredDistricts = form.oblast_id
+    ? districts.filter(d => String(d.oblast_id) === form.oblast_id)
+    : []
+
   const nextStep = () => {
     setError('')
-    if (step === 0 && (!form.category || !form.district)) {
-      setError('Выберите категорию и район'); return
+    if (step === 0 && !form.category) {
+      setError('Выберите категорию'); return
     }
-    if (step === 1 && (!form.name || !form.phone)) {
+    if (step === 1 && (!form.oblast_id || !form.district)) {
+      setError('Выберите область и район'); return
+    }
+    if (step === 2 && (!form.name || !form.phone)) {
       setError('Введите имя и телефон'); return
     }
     setStep(s => s + 1)
@@ -60,7 +67,6 @@ export default function RegisterPage() {
             <p>Бесплатно. После проверки вы появитесь в каталоге.</p>
           </div>
 
-          {/* Шаги */}
           <div className={styles.steps}>
             {STEPS.map((s, i) => (
               <div key={i} className={`${styles.step} ${i === step ? styles.stepActive : ''} ${i < step ? styles.stepDone : ''}`}>
@@ -74,25 +80,38 @@ export default function RegisterPage() {
 
           <div className={styles.formBody}>
             {step === 0 && (
+              <div className="form-group">
+                <label className="form-label">Категория *</label>
+                <select value={form.category} onChange={e => set('category', e.target.value)} className="form-select">
+                  <option value="">Выберите категорию</option>
+                  {categories.map(c => <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>)}
+                </select>
+              </div>
+            )}
+
+            {step === 1 && (
               <>
                 <div className="form-group">
-                  <label className="form-label">Категория *</label>
-                  <select value={form.category} onChange={e => set('category', e.target.value)} className="form-select">
-                    <option value="">Выберите категорию</option>
-                    {categories.map(c => <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>)}
+                  <label className="form-label">Область *</label>
+                  <select value={form.oblast_id}
+                    onChange={e => { set('oblast_id', e.target.value); set('district', '') }}
+                    className="form-select">
+                    <option value="">Выберите область</option>
+                    {oblasts.map(o => <option key={o.id} value={String(o.id)}>🗺 {o.name}</option>)}
                   </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Район *</label>
-                  <select value={form.district} onChange={e => set('district', e.target.value)} className="form-select">
-                    <option value="">Выберите район</option>
-                    {districts.map(d => <option key={d.id} value={d.name}>📍 {d.name}</option>)}
+                  <select value={form.district} onChange={e => set('district', e.target.value)}
+                    className="form-select" disabled={!form.oblast_id}>
+                    <option value="">{form.oblast_id ? 'Выберите район' : 'Сначала выберите область'}</option>
+                    {filteredDistricts.map(d => <option key={d.id} value={d.name}>📍 {d.name}</option>)}
                   </select>
                 </div>
               </>
             )}
 
-            {step === 1 && (
+            {step === 2 && (
               <>
                 <div className="form-group">
                   <label className="form-label">Название / Имя *</label>
@@ -110,18 +129,18 @@ export default function RegisterPage() {
                   <label className="form-label">Instagram / соцсеть</label>
                   <input className="form-input" value={form.social_link}
                     onChange={e => set('social_link', e.target.value)}
-                    placeholder="@mykafe или @master_bakyt" />
+                    placeholder="@mykafe или ссылка" />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Telegram username</label>
                   <input className="form-input" value={form.tg_username}
                     onChange={e => set('tg_username', e.target.value.replace('@', ''))}
-                    placeholder="@username (без @)" />
+                    placeholder="username (без @)" />
                 </div>
               </>
             )}
 
-            {step === 2 && (
+            {step === 3 && (
               <>
                 <div className="form-group">
                   <label className="form-label">Описание *</label>
@@ -143,7 +162,7 @@ export default function RegisterPage() {
             {step > 0 && (
               <button onClick={() => setStep(s => s - 1)} className="btn btn-outline">← Назад</button>
             )}
-            {step < 2
+            {step < 3
               ? <button onClick={nextStep} className="btn btn-primary">Далее →</button>
               : <button onClick={submit} disabled={loading} className="btn btn-primary">
                   {loading ? 'Отправка...' : 'Отправить заявку ✓'}
