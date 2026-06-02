@@ -39,7 +39,7 @@ export default function Layout() {
                 <img src="/logo-icon.png" alt="Kabarman" className={styles.footerLogoImg} />
                 <span>KABARMAN</span>
               </div>
-              <p>Справочник услуг и бизнеса<br/>Иссык-Кульской области</p>
+              <p>Справочник услуг и бизнеса<br/>Кыргызстана</p>
             </div>
             <div className={styles.footerLinks}>
               <div className={styles.footerCol}>
@@ -48,9 +48,10 @@ export default function Layout() {
                 <Link to="/register">Добавить бизнес</Link>
               </div>
               <div className={styles.footerCol}>
-                <div className={styles.footerTitle}>Районы</div>
-                <span>Каракол · Ак-Суу · Тюп</span>
-                <span>Жети-Огуз · Тон · Чолпон-Ата</span>
+                <div className={styles.footerTitle}>Области</div>
+                <span>Бишкек · Ош · Чуй</span>
+                <span>Иссык-Куль · Жалал-Абад</span>
+                <span>Нарын · Талас · Баткен</span>
               </div>
               <div className={styles.footerCol}>
                 <div className={styles.footerTitle}>Контакты</div>
@@ -60,7 +61,7 @@ export default function Layout() {
             </div>
           </div>
           <div className={styles.footerBottom}>
-            © 2025 Кабарман — Иссык-Кульская область, Кыргызстан
+            © 2025 Кабарман — Кыргызстан
           </div>
         </div>
       </footer>
