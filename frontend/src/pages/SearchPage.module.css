@@ -96,8 +96,9 @@
 }
 .pName { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
 .pMeta { display: flex; gap: 6px; flex-wrap: wrap; }
-.pDesc { font-size: 13px; color: var(--gray); line-height: 1.5; margin-bottom: 12px; }
-.pActions { display: flex; gap: 8px; flex-wrap: wrap; }
+.pDesc   { font-size: 13px; color: var(--gray); line-height: 1.5; margin-bottom: 8px; }
+.pDetail { font-size: 13px; color: var(--dark); margin-bottom: 6px; }
+.pActions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
 @media (max-width: 640px) {
   .listingGrid { grid-template-columns: 1fr 1fr; }

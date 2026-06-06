@@ -145,9 +145,11 @@ function ListingCard({ l }) {
 
 function ProviderCard({ p }) {
   const wa = `https://wa.me/${p.phone.replace(/\D/g, '')}?text=${encodeURIComponent('Здравствуйте! Нашёл вас на Кабарман.')}`
+  const tg = p.tg_username ? `https://t.me/${p.tg_username}` : null
   const ig = p.social_link
     ? p.social_link.startsWith('http') ? p.social_link : `https://instagram.com/${p.social_link.replace(/^@/, '')}`
     : null
+  const mapsAddr = encodeURIComponent(p.address || p.district)
 
   return (
     <div className={styles.pCard}>
@@ -161,11 +163,14 @@ function ProviderCard({ p }) {
           </div>
         </div>
       </div>
-      {p.description && <p className={styles.pDesc}>{p.description.slice(0, 100)}{p.description.length > 100 ? '...' : ''}</p>}
+      {p.description && <p className={styles.pDesc}>{p.description}</p>}
+      {p.address    && <div className={styles.pDetail}>🏠 {p.address}</div>}
+      <div className={styles.pDetail}>📞 {p.phone}</div>
       <div className={styles.pActions}>
         <a href={wa} target="_blank" className="btn btn-primary btn-sm">💬 WhatsApp</a>
-        {p.tg_username && <a href={`https://t.me/${p.tg_username}`} target="_blank" className="btn btn-outline btn-sm">✈️ TG</a>}
+        {tg && <a href={tg} target="_blank" className="btn btn-outline btn-sm">✈️ TG</a>}
         {ig && <a href={ig} target="_blank" className="btn btn-outline btn-sm">📸 Instagram</a>}
+        <a href={`https://2gis.kg/search/${mapsAddr}`} target="_blank" className="btn btn-outline btn-sm">🗺 2GIS</a>
       </div>
     </div>
   )
