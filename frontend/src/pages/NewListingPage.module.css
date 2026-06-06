@@ -1,0 +1,92 @@
+.catGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.catTile {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+  transition: all 0.15s;
+  text-align: center;
+}
+.catTile:hover { border-color: var(--green); }
+.catTileActive { border-color: var(--green); background: var(--green-pale); color: var(--green); }
+
+.catEmoji { font-size: 28px; }
+
+.checkLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.photoGrid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.photoThumb {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+.photoThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.photoThumb button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoAdd {
+  width: 90px;
+  height: 90px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--gray);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.photoAdd:hover { border-color: var(--green); color: var(--green); }
+
+@media (max-width: 480px) {
+  .catGrid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .catTile { padding: 12px 4px; font-size: 12px; }
+  .catEmoji { font-size: 22px; }
+}

@@ -6,6 +6,7 @@ const path = require('path')
 
 const providersRouter = require('./routes/providers')
 const miscRouter = require('./routes/misc')
+const listingsRouter = require('./routes/listings')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200 }))
 
 app.use('/api/providers', providersRouter)
+app.use('/api/listings', listingsRouter)
 app.use('/api', miscRouter)
 
 app.get('/health', (req, res) => res.json({ status: 'ok', app: 'Кабарман API' }))

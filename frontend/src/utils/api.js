@@ -20,6 +20,16 @@ export const catalogApi = {
   register:             (data)     => api.post('/providers', data)
 }
 
+export const listingsApi = {
+  getAll:       (params)    => api.get('/listings', { params }),
+  getOne:       (id)        => api.get(`/listings/${id}`),
+  getCategories:()          => api.get('/listings/categories'),
+  create:       (data)      => api.post('/listings', data),
+  uploadPhotos: (formData)  => api.post('/listings/photos', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
 export const adminApi = {
   login:       (data)  => api.post('/admin/login', data),
   getStats:    ()      => api.get('/admin/stats'),

@@ -15,8 +15,9 @@ export default function Layout() {
               <span>KABARMAN</span>
             </Link>
             <nav className={styles.nav}>
-              <Link to="/catalog"  className={loc.pathname === '/catalog'  ? styles.active : ''}>Каталог</Link>
-              <Link to="/register" className={loc.pathname === '/register' ? styles.active : ''}>Добавить бизнес</Link>
+              <Link to="/catalog"   className={loc.pathname === '/catalog'            ? styles.active : ''}>Каталог</Link>
+              <Link to="/listings" className={loc.pathname.startsWith('/listings')   ? styles.active : ''}>📢 Объявления</Link>
+              <Link to="/register" className={loc.pathname === '/register'           ? styles.active : ''}>Добавить бизнес</Link>
             </nav>
             <a href="https://t.me/kabarmanbot" target="_blank" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
               ✈️ Бот в Telegram
@@ -45,6 +46,7 @@ export default function Layout() {
               <div className={styles.footerCol}>
                 <div className={styles.footerTitle}>Навигация</div>
                 <Link to="/catalog">Каталог</Link>
+                <Link to="/listings">Объявления</Link>
                 <Link to="/register">Добавить бизнес</Link>
               </div>
               <div className={styles.footerCol}>
