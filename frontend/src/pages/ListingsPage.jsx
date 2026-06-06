@@ -57,9 +57,12 @@ export default function ListingsPage() {
   const [total, setTotal]       = useState(0)
   const [loading, setLoading]   = useState(true)
 
-  const category  = params.get('category')  || ''
-  const oblast    = params.get('oblast')    || ''
-  const district  = params.get('district')  || ''
+  const category = params.get('category') || ''
+  const oblast   = params.get('oblast')   || ''
+  const district = params.get('district') || ''
+  const q        = params.get('q')        || ''
+
+  const [searchInput, setSearchInput] = useState(q)
 
   const filteredDistricts = oblast
     ? districts.filter(d => String(d.oblast_id) === oblast)
@@ -72,20 +75,29 @@ export default function ListingsPage() {
     setParams(next)
   }
 
+  const handleSearch = (e) => {
+    e.preventDefault()
+    setFilter('q', searchInput.trim())
+  }
+
+  const hasFilters = category || oblast || district || q
+
   useEffect(() => {
     setLoading(true)
     const p = {}
-    if (category) p.category = category
-    if (oblast)   p.oblast_id = oblast
+    if (category)  p.category  = category
+    if (oblast)    p.oblast_id = oblast
     if (district) {
       const d = districts.find(d => d.name === district)
       if (d) p.district_id = d.id
     }
+    if (q) p.q = q
+
     listingsApi.getAll(p)
       .then(r => { setListings(r.data.listings); setTotal(r.data.total) })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [category, oblast, district])
+  }, [category, oblast, district, q])
 
   return (
     <div className={styles.page}>
@@ -98,6 +110,23 @@ export default function ListingsPage() {
           </div>
           <Link to="/listings/new" className="btn btn-primary">+ Подать объявление</Link>
         </div>
+
+        {/* Поиск */}
+        <form onSubmit={handleSearch} className={styles.searchRow}>
+          <input
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            placeholder="Поиск по объявлениям..."
+            className={`form-input ${styles.searchInput}`}
+          />
+          <button type="submit" className="btn btn-primary">🔍 Найти</button>
+          {q && (
+            <button type="button" className="btn btn-outline btn-sm"
+              onClick={() => { setSearchInput(''); setFilter('q', '') }}>
+              ✕ Сбросить
+            </button>
+          )}
+        </form>
 
         {/* Категории */}
         <div className={styles.catRow}>
@@ -123,19 +152,26 @@ export default function ListingsPage() {
             <option value="">Все районы</option>
             {filteredDistricts.map(d => <option key={d.id} value={d.name}>📍 {d.name}</option>)}
           </select>
-          {(category || oblast || district) && (
-            <button onClick={() => setParams({})} className="btn btn-outline btn-sm">✕ Сбросить</button>
+          {hasFilters && (
+            <button onClick={() => { setSearchInput(''); setParams({}) }} className="btn btn-outline btn-sm">
+              ✕ Сбросить всё
+            </button>
           )}
         </div>
 
         <div className={styles.resultsLine}>
-          {loading ? 'Загрузка...' : `Найдено: ${total}`}
+          {loading
+            ? 'Загрузка...'
+            : q
+            ? `По запросу «${q}»: ${total}`
+            : `Найдено: ${total}`
+          }
         </div>
 
         {!loading && listings.length === 0 ? (
           <div className={styles.empty}>
             <div style={{fontSize: 48}}>😔</div>
-            <h3>Объявлений нет</h3>
+            <h3>{q ? `Ничего не найдено по «${q}»` : 'Объявлений нет'}</h3>
             <p>Будьте первым — <Link to="/listings/new">подайте объявление</Link></p>
           </div>
         ) : (

@@ -11,6 +11,14 @@
 .title { font-size: 28px; font-weight: 800; margin: 0 0 4px; }
 .sub   { color: var(--gray); margin: 0; font-size: 15px; }
 
+.searchRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.searchInput { flex: 1; }
+
 .catRow {
   display: flex;
   gap: 8px;
