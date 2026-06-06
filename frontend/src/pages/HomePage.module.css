@@ -45,6 +45,7 @@
   overflow: hidden;
   box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   max-width: 520px; margin-bottom: 0;
+  position: relative; z-index: 2;
 }
 .searchInput {
   flex: 1; border: none; outline: none;
