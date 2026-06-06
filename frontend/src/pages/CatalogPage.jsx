@@ -51,11 +51,11 @@ export default function CatalogPage() {
   const [providers, setProviders] = useState([])
   const [total, setTotal]         = useState(0)
   const [loading, setLoading]     = useState(true)
-  const [q, setQ]                 = useState('')
-
   const category = params.get('category') || ''
   const oblast   = params.get('oblast')   || ''
   const district = params.get('district') || ''
+
+  const [q, setQ] = useState(params.get('q') || '')
 
   const filteredDistricts = oblast
     ? districts.filter(d => String(d.oblast_id) === oblast)

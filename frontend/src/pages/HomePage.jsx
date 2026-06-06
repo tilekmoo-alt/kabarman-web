@@ -31,7 +31,7 @@ export default function HomePage() {
   const handleSearch = (e) => {
     e.preventDefault()
     const q = search.trim()
-    navigate(q ? `/listings?q=${encodeURIComponent(q)}` : '/listings')
+    navigate(q ? `/search?q=${encodeURIComponent(q)}` : '/search')
   }
 
   return (

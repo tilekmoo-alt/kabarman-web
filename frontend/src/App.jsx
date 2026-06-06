@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import AdminPage from './pages/AdminPage'
 import ListingsPage from './pages/ListingsPage'
 import NewListingPage from './pages/NewListingPage'
+import SearchPage from './pages/SearchPage'
 
 export const AppContext = React.createContext({})
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/"          element={<HomePage />} />
           <Route path="/catalog"       element={<CatalogPage />} />
+          <Route path="/search"        element={<SearchPage />} />
           <Route path="/listings"      element={<ListingsPage />} />
           <Route path="/listings/new"  element={<NewListingPage />} />
           <Route path="/register"      element={<RegisterPage />} />
