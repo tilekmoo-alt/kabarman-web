@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { catalogApi, listingsApi } from '../utils/api'
 import styles from './SearchPage.module.css'
@@ -128,7 +128,7 @@ function ListingCard({ l }) {
     : 'Бесплатно'
 
   return (
-    <div className={styles.lCard}>
+    <Link to={`/listings/${l.id}`} className={styles.lCard}>
       {l.photos?.[0]
         ? <img src={l.photos[0]} alt={l.title} className={styles.lImg} loading="lazy" />
         : <div className={styles.lImgEmpty}>📷</div>
@@ -138,12 +138,8 @@ function ListingCard({ l }) {
         <div className={styles.lTitle}>{l.title}</div>
         <div className={styles.lPrice}>{price}</div>
         {l.district_name && <div className={styles.lLoc}>📍 {l.district_name}</div>}
-        <a href={`https://wa.me/${l.contact_phone.replace(/\D/g,'')}`}
-           target="_blank" className="btn btn-primary btn-sm" style={{marginTop: 8, display:'block', textAlign:'center'}}>
-          💬 {l.contact_phone}
-        </a>
       </div>
-    </div>
+    </Link>
   )
 }
 

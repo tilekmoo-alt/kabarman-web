@@ -28,7 +28,7 @@ function ListingCard({ l }) {
   const photo = l.photos?.[0]
 
   return (
-    <div className={styles.card}>
+    <Link to={`/listings/${l.id}`} className={styles.card}>
       {photo
         ? <img src={photo} alt={l.title} className={styles.cardImg} loading="lazy" />
         : <div className={styles.cardImgEmpty}>📷</div>
@@ -41,12 +41,8 @@ function ListingCard({ l }) {
         <div className={styles.cardTitle}>{l.title}</div>
         <div className={styles.cardPrice}>{price}</div>
         {l.description && <p className={styles.cardDesc}>{l.description.slice(0, 80)}{l.description.length > 80 ? '...' : ''}</p>}
-        <a href={`https://wa.me/${l.contact_phone.replace(/\D/g,'')}`}
-           target="_blank" className={`btn btn-primary btn-sm ${styles.cardBtn}`}>
-          💬 {l.contact_phone}
-        </a>
       </div>
-    </div>
+    </Link>
   )
 }
 

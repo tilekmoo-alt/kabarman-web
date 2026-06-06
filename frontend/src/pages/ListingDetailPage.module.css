@@ -1,0 +1,82 @@
+.page { padding: 32px 0 80px; }
+.loading { text-align: center; padding: 80px; color: var(--gray); }
+
+.back { margin-bottom: 24px; }
+.back a { color: var(--green); text-decoration: none; font-size: 14px; font-weight: 500; }
+.back a:hover { text-decoration: underline; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Gallery */
+.gallery {}
+.mainPhoto {
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.noPhoto {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--bg);
+  border-radius: 16px; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; color: var(--gray);
+}
+.thumbs {
+  display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+}
+.thumb {
+  width: 72px; height: 72px; object-fit: cover;
+  border-radius: 8px; border: 2px solid var(--border);
+  cursor: pointer; transition: border-color 0.15s;
+}
+.thumbActive { border-color: var(--green); }
+
+/* Info */
+.meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+.title {
+  font-family: var(--font-head);
+  font-size: 26px; font-weight: 800;
+  color: var(--dark); line-height: 1.2;
+  margin-bottom: 12px;
+}
+.price {
+  font-size: 28px; font-weight: 800;
+  color: var(--green); margin-bottom: 24px;
+}
+
+.desc { margin-bottom: 24px; }
+.descLabel, .contactLabel {
+  font-size: 12px; font-weight: 600;
+  color: var(--gray); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.desc p {
+  font-size: 15px; line-height: 1.7;
+  color: var(--dark); white-space: pre-wrap;
+}
+
+.contact {
+  background: var(--bg);
+  border-radius: 12px; padding: 16px;
+  margin-bottom: 20px;
+}
+.contactName { font-size: 15px; color: var(--dark); margin-bottom: 6px; }
+.contactPhone { font-size: 17px; font-weight: 600; color: var(--dark); }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.date { font-size: 13px; color: var(--gray); }
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  .title { font-size: 22px; }
+  .price { font-size: 24px; }
+}

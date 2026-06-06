@@ -65,6 +65,10 @@
   border: 1px solid var(--border);
   overflow: hidden;
   transition: box-shadow 0.15s;
+  text-decoration: none;
+  color: var(--dark);
+  display: block;
+  cursor: pointer;
 }
 .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
 
