@@ -39,4 +39,8 @@ export const adminApi = {
   delete:      (id)    => api.delete(`/providers/${id}`)
 }
 
+export const reportApi = {
+  send: (type, id) => api.post('/report', { type, id })
+}
+
 export default api

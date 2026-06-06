@@ -100,6 +100,14 @@
 .pDetail { font-size: 13px; color: var(--dark); margin-bottom: 6px; }
 .pActions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
+.reportBtn {
+  background: none; border: none; padding: 4px 0 0;
+  font-size: 12px; color: var(--gray); cursor: pointer;
+  text-decoration: underline; opacity: 0.6; display: block;
+}
+.reportBtn:hover { opacity: 1; color: #e74c3c; }
+.reportBtn:disabled { cursor: default; color: var(--green); opacity: 1; text-decoration: none; }
+
 @media (max-width: 640px) {
   .listingGrid { grid-template-columns: 1fr 1fr; }
   .providerGrid { grid-template-columns: 1fr; }

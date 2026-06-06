@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { listingsApi } from '../utils/api'
+import { listingsApi, reportApi } from '../utils/api'
 import styles from './ListingDetailPage.module.css'
 
 export default function ListingDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [listing, setListing] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [photo, setPhoto]     = useState(0)
+  const [listing, setListing]   = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [photo, setPhoto]       = useState(0)
+  const [reported, setReported] = useState(false)
+
+  const handleReport = async () => {
+    await reportApi.send('listing', listing.id).catch(() => {})
+    setReported(true)
+  }
 
   useEffect(() => {
     listingsApi.getOne(id)
@@ -107,6 +113,10 @@ export default function ListingDetailPage() {
             <div className={styles.date}>
               Опубликовано: {new Date(listing.created_at).toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
+
+            <button onClick={handleReport} disabled={reported} className={styles.reportBtn}>
+              {reported ? '✅ Жалоба отправлена' : '🚩 Пожаловаться'}
+            </button>
           </div>
 
         </div>

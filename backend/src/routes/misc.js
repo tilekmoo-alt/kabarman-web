@@ -85,4 +85,33 @@ router.get('/admin/pending', authAdmin, async (req, res) => {
   res.json(result.rows)
 })
 
+// POST /api/report — жалоба на объявление или бизнес
+router.post('/report', async (req, res) => {
+  const { type, id } = req.body
+  if (!type || !id) return res.status(400).json({ error: 'Укажите type и id' })
+
+  const token = process.env.BOT_TOKEN
+  const adminIds = (process.env.ADMIN_IDS || '').split(',').map(s => s.trim()).filter(Boolean)
+
+  if (token && adminIds.length) {
+    const label = type === 'listing' ? 'объявление' : 'бизнес'
+    const text = `🚩 <b>Жалоба на ${label} #${id}</b>\n\nПроверьте и удалите если нарушает правила.`
+    const keyboard = {
+      inline_keyboard: [[
+        { text: '❌ Удалить', callback_data: `del_${type}:${id}` }
+      ]]
+    }
+    for (const chatId of adminIds) {
+      try {
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML', reply_markup: keyboard })
+        })
+      } catch (_) {}
+    }
+  }
+  res.json({ ok: true })
+})
+
 module.exports = router

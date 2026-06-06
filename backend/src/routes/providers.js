@@ -8,7 +8,7 @@ async function notifyAdmins(providerId, p) {
   if (!token || !adminIds.length) return
 
   const text =
-    `🌐 Новая заявка с сайта — Кабарман\n\n` +
+    `🏢 <b>Новый бизнес — Кабарман</b>\n\n` +
     `📁 ${p.category} · 📍 ${p.district}\n` +
     `🏷️ ${p.name}\n` +
     `📞 ${p.phone}\n` +
@@ -20,8 +20,7 @@ async function notifyAdmins(providerId, p) {
 
   const keyboard = {
     inline_keyboard: [[
-      { text: '✅ Одобрить', callback_data: `approve:${providerId}` },
-      { text: '❌ Отклонить', callback_data: `reject:${providerId}` }
+      { text: '❌ Удалить', callback_data: `del_provider:${providerId}` }
     ]]
   }
 
@@ -30,7 +29,7 @@ async function notifyAdmins(providerId, p) {
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text, reply_markup: keyboard })
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML', reply_markup: keyboard })
       })
     } catch (_) {}
   }
@@ -116,14 +115,14 @@ router.post('/', async (req, res) => {
 
     const ins = await pool.query(`
       INSERT INTO providers (tg_id, name, phone, category_id, district_id, description, address, social_link, tg_username, is_active, is_approved)
-      VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8, true, false)
+      VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8, true, true)
       RETURNING id
     `, [name, phone, catQ.rows[0].id, distQ.rows[0].id, description, address, socialUrl, tg_username])
 
     const providerId = ins.rows[0].id
     await notifyAdmins(providerId, { name, phone, category, district, description, address, social_link: socialUrl, tg_username })
 
-    res.status(201).json({ message: 'Заявка принята. Мы проверим и активируем в течение 24 часов.' })
+    res.status(201).json({ message: 'Ваш бизнес добавлен в каталог!' })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Ошибка сервера' })

@@ -4,6 +4,39 @@ const multer = require('multer')
 const sharp = require('sharp')
 const { uploadToR2 } = require('../utils/r2')
 
+async function notifyAdminsNewListing(listingId, l) {
+  const token = process.env.BOT_TOKEN
+  const adminIds = (process.env.ADMIN_IDS || '').split(',').map(s => s.trim()).filter(Boolean)
+  if (!token || !adminIds.length) return
+
+  const priceStr = l.is_negotiable ? 'Договорная' : l.price ? `${l.price} сом` : 'Бесплатно'
+  const text =
+    `📢 <b>Новое объявление — Кабарман</b>\n\n` +
+    `🏷 ${l.category}\n` +
+    `📌 ${l.title}\n` +
+    `💰 ${priceStr}\n` +
+    (l.description ? `📝 ${l.description.slice(0, 100)}\n` : '') +
+    `📞 ${l.contact_phone}\n` +
+    (l.tg_username ? `✈️ @${l.tg_username}\n` : '') +
+    `\nID: ${listingId}`
+
+  const keyboard = {
+    inline_keyboard: [[
+      { text: '❌ Удалить', callback_data: `del_listing:${listingId}` }
+    ]]
+  }
+
+  for (const chatId of adminIds) {
+    try {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML', reply_markup: keyboard })
+      })
+    } catch (_) {}
+  }
+}
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 15 * 1024 * 1024 },
@@ -146,7 +179,9 @@ router.post('/', async (req, res) => {
       tg_username || null
     ])
 
-    res.status(201).json(result.rows[0])
+    const newListing = result.rows[0]
+    notifyAdminsNewListing(newListing.id, req.body).catch(() => {})
+    res.status(201).json(newListing)
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Ошибка сервера' })

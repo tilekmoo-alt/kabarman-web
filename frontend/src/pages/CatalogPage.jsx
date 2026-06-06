@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { catalogApi } from '../utils/api'
+import { catalogApi, reportApi } from '../utils/api'
 import { AppContext } from '../App'
 import styles from './CatalogPage.module.css'
 
 function ProviderCard({ p }) {
+  const [reported, setReported] = useState(false)
   const wa = `https://wa.me/${p.phone.replace(/\D/g, '')}?text=${encodeURIComponent('Здравствуйте! Нашёл вас на Кабарман.')}`
   const tg = p.tg_username ? `https://t.me/${p.tg_username}` : null
   const ig = p.social_link
@@ -41,6 +42,10 @@ function ProviderCard({ p }) {
         {ig && <a href={ig} target="_blank" className="btn btn-outline btn-sm">📸 Instagram</a>}
         <a href={`https://2gis.kg/search/${mapsAddr}`} target="_blank" className="btn btn-outline btn-sm">🗺 2GIS</a>
       </div>
+      <button onClick={() => { reportApi.send('provider', p.id).catch(()=>{}); setReported(true) }}
+        disabled={reported} className={styles.reportBtn}>
+        {reported ? '✅ Жалоба отправлена' : '🚩 Пожаловаться'}
+      </button>
     </div>
   )
 }
