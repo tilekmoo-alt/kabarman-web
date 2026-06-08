@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
 import { catalogApi } from './utils/api'
 import Layout from './components/layout/Layout'
 import HomePage from './pages/HomePage'
@@ -27,6 +33,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={{ categories, oblasts, districts }}>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/"          element={<HomePage />} />
