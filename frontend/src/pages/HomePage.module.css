@@ -86,15 +86,16 @@
 }
 .actionCard {
   display: flex; align-items: center; gap: 16px;
-  background: white; border: 2px solid var(--border);
+  background: white; border: 2px solid #C0392B;
   border-radius: 16px; padding: 22px 24px;
   text-decoration: none; color: var(--dark);
   transition: all 0.2s;
 }
 .actionCard:hover {
-  border-color: var(--green);
-  box-shadow: 0 4px 20px rgba(26,122,94,0.12);
+  border-color: #a93226;
+  box-shadow: 0 4px 20px rgba(192,57,43,0.15);
   transform: translateY(-2px);
+  background: #fdf9f9;
 }
 .actionCardAlt { border-color: #e8f4f0; background: #f9fdfb; }
 .actionCardAlt:hover { border-color: var(--green); background: white; }
