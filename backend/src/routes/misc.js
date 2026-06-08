@@ -90,17 +90,61 @@ router.post('/report', async (req, res) => {
   const { type, id } = req.body
   if (!type || !id) return res.status(400).json({ error: 'Укажите type и id' })
 
-  const token = process.env.BOT_TOKEN
+  const token    = process.env.BOT_TOKEN
   const adminIds = (process.env.ADMIN_IDS || '').split(',').map(s => s.trim()).filter(Boolean)
 
   if (token && adminIds.length) {
-    const label = type === 'listing' ? 'объявление' : 'бизнес'
-    const text = `🚩 <b>Жалоба на ${label} #${id}</b>\n\nПроверьте и удалите если нарушает правила.`
+    let text = ''
     const keyboard = {
       inline_keyboard: [[
         { text: '❌ Удалить', callback_data: `del_${type}:${id}` }
       ]]
     }
+
+    try {
+      if (type === 'listing') {
+        const r = await pool.query(
+          `SELECT l.title, l.category, l.price, l.is_negotiable, l.contact_phone,
+                  l.description, d.name AS district
+           FROM listings l
+           LEFT JOIN districts d ON l.district_id = d.id
+           WHERE l.id = $1`, [id]
+        )
+        const l = r.rows[0]
+        if (l) {
+          const price = l.is_negotiable ? 'Договорная' : l.price ? `${l.price} сом` : 'Бесплатно'
+          text =
+            `🚩 <b>Жалоба на объявление #${id}</b>\n\n` +
+            `📌 ${l.title}\n` +
+            `🏷 ${l.category} · 💰 ${price}\n` +
+            (l.district ? `📍 ${l.district}\n` : '') +
+            (l.description ? `📝 ${l.description.slice(0, 100)}\n` : '') +
+            `📞 ${l.contact_phone}`
+        }
+      } else {
+        const r = await pool.query(
+          `SELECT p.name, p.phone, p.description, p.address,
+                  c.name AS category, d.name AS district
+           FROM providers p
+           JOIN categories c ON p.category_id = c.id
+           JOIN districts d ON p.district_id = d.id
+           WHERE p.id = $1`, [id]
+        )
+        const p = r.rows[0]
+        if (p) {
+          text =
+            `🚩 <b>Жалоба на бизнес #${id}</b>\n\n` +
+            `🏷️ ${p.name}\n` +
+            `📁 ${p.category} · 📍 ${p.district}\n` +
+            (p.description ? `📝 ${p.description.slice(0, 100)}\n` : '') +
+            (p.address ? `🏠 ${p.address}\n` : '') +
+            `📞 ${p.phone}`
+        }
+      }
+    } catch (_) {}
+
+    if (!text) text = `🚩 <b>Жалоба на ${type === 'listing' ? 'объявление' : 'бизнес'} #${id}</b>`
+
     for (const chatId of adminIds) {
       try {
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
