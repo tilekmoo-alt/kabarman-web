@@ -34,6 +34,7 @@
 .nav a.active { background: var(--green-pale); color: var(--green); font-weight: 600; }
 
 .tgBtn { margin-left: auto; white-space: nowrap; }
+.headerBtns { margin-left: auto; display: flex; gap: 8px; align-items: center; white-space: nowrap; }
 
 /* Footer */
 .footer {
@@ -83,4 +84,6 @@
   .footerInner { grid-template-columns: 1fr; gap: 24px; }
   .footerLinks { grid-template-columns: 1fr 1fr; }
   .tgBtn { font-size: 12px; padding: 8px 12px; }
+  .headerBtns { gap: 6px; }
+  .headerBtns .btn { font-size: 12px; padding: 7px 10px; }
 }

@@ -18,9 +18,14 @@ export default function Layout() {
               <Link to="/listings" className={loc.pathname.startsWith('/listings') ? styles.active : ''}>Объявления</Link>
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
-            <Link to="/post" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
-              📢 Подать объявление
-            </Link>
+            <div className={styles.headerBtns}>
+              <Link to="/post" className="btn btn-primary btn-sm">
+                📢 Подать объявление
+              </Link>
+              <a href="https://t.me/kabarmanbot" target="_blank" className="btn btn-outline btn-sm">
+                ✈️ Бот
+              </a>
+            </div>
           </div>
         </div>
       </header>
