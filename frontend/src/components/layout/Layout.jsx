@@ -18,7 +18,7 @@ export default function Layout() {
               <Link to="/listings" className={loc.pathname.startsWith('/listings') ? styles.active : ''}>Объявления</Link>
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
-            <Link to="/listings/new" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
+            <Link to="/post" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
               📢 Подать объявление
             </Link>
           </div>
@@ -46,7 +46,7 @@ export default function Layout() {
                 <div className={styles.footerTitle}>Навигация</div>
                 <Link to="/listings">Объявления</Link>
                 <Link to="/search">Поиск</Link>
-                <Link to="/listings/new">Подать объявление</Link>
+                <Link to="/post">Подать объявление</Link>
               </div>
               <div className={styles.footerCol}>
                 <div className={styles.footerTitle}>Области</div>

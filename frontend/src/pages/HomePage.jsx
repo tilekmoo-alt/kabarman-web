@@ -69,7 +69,7 @@ export default function HomePage() {
       <section className={styles.actionsSection}>
         <div className="container">
           <div className={styles.actionCards}>
-            <Link to="/listings/new" className={styles.actionCard}>
+            <Link to="/post" className={styles.actionCard}>
               <div className={styles.actionIcon}>📢</div>
               <div className={styles.actionText}>
                 <div className={styles.actionTitle}>Подать объявление</div>
