@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
     }
     if (q) {
       params.push(`%${q.toLowerCase()}%`)
-      conditions.push(`(LOWER(p.name) LIKE $${params.length} OR LOWER(p.description) LIKE $${params.length})`)
+      conditions.push(`(LOWER(p.name) LIKE $${params.length} OR LOWER(p.description) LIKE $${params.length} OR LOWER(c.name) LIKE $${params.length})`)
     }
 
     const where = conditions.join(' AND ')

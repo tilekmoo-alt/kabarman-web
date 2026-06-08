@@ -65,7 +65,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Два главных действия */}
+      {/* Главное действие */}
       <section className={styles.actionsSection}>
         <div className="container">
           <div className={styles.actionCards}>
@@ -74,14 +74,6 @@ export default function HomePage() {
               <div className={styles.actionText}>
                 <div className={styles.actionTitle}>Подать объявление</div>
                 <div className={styles.actionSub}>Продайте товар или предложите услугу — бесплатно</div>
-              </div>
-              <span className={styles.actionArrow}>→</span>
-            </Link>
-            <Link to="/register" className={`${styles.actionCard} ${styles.actionCardAlt}`}>
-              <div className={styles.actionIcon}>🏢</div>
-              <div className={styles.actionText}>
-                <div className={styles.actionTitle}>Добавить бизнес</div>
-                <div className={styles.actionSub}>Зарегистрируйте компанию или мастера в каталоге</div>
               </div>
               <span className={styles.actionArrow}>→</span>
             </Link>
@@ -124,34 +116,6 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Услуги и бизнес */}
-      <section className={styles.serviceSection}>
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Услуги и бизнес</h2>
-            <Link to="/catalog" className={styles.seeAll}>Весь каталог →</Link>
-          </div>
-          <p className={styles.serviceSub}>
-            Кафе, мастера, СТО, репетиторы — проверенные компании и специалисты
-          </p>
-          <div className={styles.serviceCats}>
-            {categories.slice(0, 8).map(cat => (
-              <Link key={cat.id}
-                to={`/catalog?category=${encodeURIComponent(cat.name)}`}
-                className={styles.serviceCat}>
-                <span className={styles.serviceCatEmoji}>{cat.emoji}</span>
-                <span>{cat.name}</span>
-              </Link>
-            ))}
-          </div>
-          <div className={styles.serviceActions}>
-            <Link to="/catalog" className="btn btn-primary">🔍 Найти мастера или компанию</Link>
-            <a href="https://t.me/kabarmanbot" target="_blank" className="btn btn-outline">
-              ✈️ Бот в Telegram
-            </a>
-          </div>
-        </div>
-      </section>
 
     </div>
   )
@@ -165,7 +129,7 @@ function MiniCard({ l }) {
     : 'Бесплатно'
 
   return (
-    <Link to="/listings" className={styles.miniCard}>
+    <Link to={`/listings/${l.id}`} className={styles.miniCard}>
       {l.photos?.[0]
         ? <img src={l.photos[0]} alt={l.title} className={styles.miniImg} loading="lazy" />
         : <div className={styles.miniImgEmpty}>📷</div>

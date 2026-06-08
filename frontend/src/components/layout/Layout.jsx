@@ -15,13 +15,12 @@ export default function Layout() {
               <span>KABARMAN</span>
             </Link>
             <nav className={styles.nav}>
-              <Link to="/listings" className={loc.pathname.startsWith('/listings')   ? styles.active : ''}>Объявления</Link>
-              <Link to="/catalog"  className={loc.pathname === '/catalog'            ? styles.active : ''}>Услуги</Link>
-              <Link to="/register" className={loc.pathname === '/register'           ? styles.active : ''}>Добавить бизнес</Link>
+              <Link to="/listings" className={loc.pathname.startsWith('/listings') ? styles.active : ''}>Объявления</Link>
+              <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
-            <a href="https://t.me/kabarmanbot" target="_blank" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
-              ✈️ Бот в Telegram
-            </a>
+            <Link to="/listings/new" className={`btn btn-primary btn-sm ${styles.tgBtn}`}>
+              📢 Подать объявление
+            </Link>
           </div>
         </div>
       </header>
@@ -40,14 +39,14 @@ export default function Layout() {
                 <img src="/logo-icon.png" alt="Kabarman" className={styles.footerLogoImg} />
                 <span>KABARMAN</span>
               </div>
-              <p>Справочник услуг и бизнеса<br/>Кыргызстана</p>
+              <p>Объявления и услуги<br/>Кыргызстана</p>
             </div>
             <div className={styles.footerLinks}>
               <div className={styles.footerCol}>
                 <div className={styles.footerTitle}>Навигация</div>
                 <Link to="/listings">Объявления</Link>
-                <Link to="/catalog">Услуги и бизнес</Link>
-                <Link to="/register">Добавить бизнес</Link>
+                <Link to="/search">Поиск</Link>
+                <Link to="/listings/new">Подать объявление</Link>
               </div>
               <div className={styles.footerCol}>
                 <div className={styles.footerTitle}>Области</div>
