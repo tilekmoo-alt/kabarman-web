@@ -19,7 +19,7 @@ export default function Layout() {
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
             <div className={styles.headerBtns}>
-              <Link to="/post" className="btn btn-primary btn-sm">
+              <Link to="/post" className="btn btn-post btn-sm">
                 📢 Подать объявление
               </Link>
               <a href="https://t.me/kabarmanbot" target="_blank" className="btn btn-outline btn-sm">
