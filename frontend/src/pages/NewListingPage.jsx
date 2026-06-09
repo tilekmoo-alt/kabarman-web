@@ -8,12 +8,12 @@ import listStyles from './NewListingPage.module.css'
 const CATS = [
   { emoji: '🚗', name: 'Транспорт' },
   { emoji: '🐄', name: 'Скот и животные' },
+  { emoji: '🐑', name: 'Арашан' },
   { emoji: '🏠', name: 'Недвижимость' },
+  { emoji: '🍎', name: 'Еда и продукты' },
   { emoji: '📱', name: 'Электроника' },
   { emoji: '👗', name: 'Одежда и обувь' },
-  { emoji: '🛋', name: 'Мебель и дом' },
-  { emoji: '🌾', name: 'С/х и техника' },
-  { emoji: '💼', name: 'Работа' },
+  { emoji: '🏗', name: 'Стройматериалы' },
   { emoji: '📦', name: 'Другое' },
 ]
 
