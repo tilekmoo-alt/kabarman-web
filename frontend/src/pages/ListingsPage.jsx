@@ -31,7 +31,7 @@ function ListingCard({ l }) {
     <Link to={`/listings/${l.id}`} className={styles.card}>
       {photo
         ? <img src={photo} alt={l.title} className={styles.cardImg} loading="lazy" />
-        : <div className={styles.cardImgEmpty}>📷</div>
+        : <div className={styles.cardImgEmpty}><span>Нет фото</span></div>
       }
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>

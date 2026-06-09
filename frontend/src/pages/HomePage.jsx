@@ -23,7 +23,7 @@ export default function HomePage() {
   const [recent, setRecent] = useState([])
 
   useEffect(() => {
-    listingsApi.getAll({ limit: 6 })
+    listingsApi.getAll({ limit: 12 })
       .then(r => setRecent(r.data.listings || []))
       .catch(() => {})
   }, [])
@@ -81,26 +81,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Категории объявлений */}
-      <section className={styles.section}>
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Объявления по категориям</h2>
-            <Link to="/listings" className={styles.seeAll}>Все объявления →</Link>
-          </div>
-          <div className={styles.catsGrid}>
-            {LISTING_CATS.map(cat => (
-              <Link key={cat.name}
-                to={`/listings?category=${encodeURIComponent(cat.name)}`}
-                className={styles.catCard}>
-                <span className={styles.catEmoji}>{cat.emoji}</span>
-                <span className={styles.catName}>{cat.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Свежие объявления */}
       {recent.length > 0 && (
         <section className={styles.section} style={{ paddingTop: 0 }}>
@@ -132,7 +112,7 @@ function MiniCard({ l }) {
     <Link to={`/listings/${l.id}`} className={styles.miniCard}>
       {l.photos?.[0]
         ? <img src={l.photos[0]} alt={l.title} className={styles.miniImg} loading="lazy" />
-        : <div className={styles.miniImgEmpty}>📷</div>
+        : <div className={styles.miniImgEmpty}><span>Нет фото</span></div>
       }
       <div className={styles.miniBody}>
         <div className={styles.miniCat}>{l.category}</div>

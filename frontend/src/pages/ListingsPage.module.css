@@ -81,12 +81,24 @@
 .cardImgEmpty {
   width: 100%;
   height: 140px;
-  background: var(--bg);
+  background: #f0f2f1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  color: var(--gray);
+  gap: 6px;
+  color: #aaa;
+}
+.cardImgEmpty::before {
+  content: '🖼';
+  font-size: 28px;
+  opacity: 0.4;
+}
+.cardImgEmpty span {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .cardBody { padding: 14px; }
