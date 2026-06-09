@@ -7,6 +7,7 @@ import styles from './HomePage.module.css'
 const LISTING_CATS = [
   { emoji: '🚗', name: 'Транспорт' },
   { emoji: '🐄', name: 'Скот и животные' },
+  { emoji: '🐑', name: 'Арашан' },
   { emoji: '🏠', name: 'Недвижимость' },
   { emoji: '📱', name: 'Электроника' },
   { emoji: '👗', name: 'Одежда и обувь' },

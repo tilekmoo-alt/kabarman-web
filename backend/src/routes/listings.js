@@ -96,6 +96,7 @@ router.get('/categories', (req, res) => {
   res.json([
     { emoji: '🚗', name: 'Транспорт' },
     { emoji: '🐄', name: 'Скот и животные' },
+    { emoji: '🐑', name: 'Арашан' },
     { emoji: '🏠', name: 'Недвижимость' },
     { emoji: '📱', name: 'Электроника' },
     { emoji: '👗', name: 'Одежда и обувь' },
