@@ -201,18 +201,24 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .hero { padding: 48px 0 56px; }
+  .hero { padding: 24px 0 28px; }
   .heroLogo { display: none; }
-  .actionCards { grid-template-columns: 1fr; gap: 12px; }
-  .catsGrid { grid-template-columns: repeat(3, 1fr); }
+  .heroTag { display: none; }
+  .heroSub { display: none; }
+  .heroTitle { font-size: 22px; margin-bottom: 12px; }
+  .actionCards { grid-template-columns: 1fr; gap: 10px; }
+  .actionsSection { padding: 12px 0 0; }
   .recentGrid { grid-template-columns: repeat(2, 1fr); }
+  .section { padding-top: 16px !important; }
 }
 @media (max-width: 480px) {
+  .hero { padding: 18px 0 22px; }
   .searchBox { border-radius: 10px; }
-  .searchInput { padding: 12px 14px; font-size: 14px; }
-  .searchBtn { padding: 12px 16px; font-size: 13px; }
-  .actionCard { padding: 16px 18px; }
-  .actionTitle { font-size: 15px; }
+  .searchInput { padding: 11px 12px; font-size: 14px; }
+  .searchBtn { padding: 11px 14px; font-size: 13px; }
+  .actionCard { padding: 14px 16px; }
+  .actionIcon { font-size: 24px; }
+  .actionTitle { font-size: 14px; }
   .actionSub { font-size: 12px; }
-  .recentGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .recentGrid { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
