@@ -210,6 +210,10 @@
   .actionsSection { padding: 12px 0 0; }
   .recentGrid { grid-template-columns: repeat(2, 1fr); }
   .section { padding-top: 16px !important; }
+  .catsGrid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .catCard { padding: 14px 8px; border-radius: 12px; gap: 6px; }
+  .catEmoji { font-size: 22px; }
+  .catName { font-size: 11px; }
 }
 @media (max-width: 480px) {
   .hero { padding: 18px 0 22px; }

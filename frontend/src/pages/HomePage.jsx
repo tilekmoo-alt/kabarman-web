@@ -81,6 +81,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Категории */}
+      <section className={styles.section} style={{ paddingTop: 32, paddingBottom: 0 }}>
+        <div className="container">
+          <div className={styles.sectionHead}>
+            <h2 className={styles.sectionTitle}>Категории</h2>
+          </div>
+          <div className={styles.catsGrid}>
+            {LISTING_CATS.map(c => (
+              <Link
+                key={c.name}
+                to={`/listings?category=${encodeURIComponent(c.name)}`}
+                className={styles.catCard}
+              >
+                <span className={styles.catEmoji}>{c.emoji}</span>
+                <span className={styles.catName}>{c.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Свежие объявления */}
       {recent.length > 0 && (
         <section className={styles.section} style={{ paddingTop: 0 }}>
