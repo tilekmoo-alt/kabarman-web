@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../App'
 import { listingsApi } from '../utils/api'
@@ -21,6 +21,8 @@ export default function HomePage() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [recent, setRecent] = useState([])
+  const [catsOpen, setCatsOpen] = useState(false)
+  const catsRef = useRef(null)
 
   useEffect(() => {
     listingsApi.getAll({ limit: 12 })
@@ -28,10 +30,25 @@ export default function HomePage() {
       .catch(() => {})
   }, [])
 
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (catsRef.current && !catsRef.current.contains(e.target)) {
+        setCatsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
   const handleSearch = (e) => {
     e.preventDefault()
     const q = search.trim()
     navigate(q ? `/search?q=${encodeURIComponent(q)}` : '/search')
+  }
+
+  const handleCatClick = (name) => {
+    setCatsOpen(false)
+    navigate(`/listings?category=${encodeURIComponent(name)}`)
   }
 
   return (
@@ -49,15 +66,46 @@ export default function HomePage() {
             <p className={styles.heroSub}>
               Объявления о товарах и справочник бизнеса — всё в одном месте
             </p>
-            <form onSubmit={handleSearch} className={styles.searchBox}>
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Поиск: Toyota, iPhone, сантехник..."
-                className={styles.searchInput}
-              />
-              <button type="submit" className={styles.searchBtn}>🔍 Найти</button>
-            </form>
+
+            <div className={styles.searchRow}>
+              {/* Кнопка категорий */}
+              <div className={styles.catDropWrap} ref={catsRef}>
+                <button
+                  type="button"
+                  className={`${styles.catDropBtn} ${catsOpen ? styles.catDropBtnOpen : ''}`}
+                  onClick={() => setCatsOpen(v => !v)}
+                >
+                  <span>☰ Категории</span>
+                  <span className={styles.catDropArrow}>{catsOpen ? '▲' : '▼'}</span>
+                </button>
+                {catsOpen && (
+                  <div className={styles.catDropMenu}>
+                    {LISTING_CATS.map(c => (
+                      <button
+                        key={c.name}
+                        type="button"
+                        className={styles.catDropItem}
+                        onClick={() => handleCatClick(c.name)}
+                      >
+                        <span>{c.emoji}</span>
+                        <span>{c.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Строка поиска */}
+              <form onSubmit={handleSearch} className={styles.searchBox}>
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Поиск: Toyota, iPhone, сантехник..."
+                  className={styles.searchInput}
+                />
+                <button type="submit" className={styles.searchBtn}>🔍 Найти</button>
+              </form>
+            </div>
           </div>
           <div className={styles.heroLogo}>
             <img src="/logo-icon.png" alt="Kabarman" className={styles.heroLogoImg} />
@@ -81,27 +129,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Категории */}
-      <section className={styles.section} style={{ paddingTop: 32, paddingBottom: 0 }}>
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Категории</h2>
-          </div>
-          <div className={styles.catsGrid}>
-            {LISTING_CATS.map(c => (
-              <Link
-                key={c.name}
-                to={`/listings?category=${encodeURIComponent(c.name)}`}
-                className={styles.catCard}
-              >
-                <span className={styles.catEmoji}>{c.emoji}</span>
-                <span className={styles.catName}>{c.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Свежие объявления */}
       {recent.length > 0 && (
         <section className={styles.section} style={{ paddingTop: 0 }}>
@@ -116,7 +143,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
 
     </div>
   )
