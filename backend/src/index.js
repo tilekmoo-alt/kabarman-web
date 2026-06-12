@@ -21,6 +21,12 @@ app.use((req, res, next) => { console.log(`[req] ${req.method} ${req.path}`); ne
 app.use('/api/providers', providersRouter)
 app.use('/api/listings', listingsRouter)
 app.use('/api', miscRouter)
+
+// Inline auth callback — bypass router to debug routing issue
+app.get('/auth/google/callback', (req, res) => {
+  res.send(`<pre>INLINE CALLBACK HIT\ncode: ${!!req.query.code}\npath: ${req.path}</pre>`)
+})
+
 app.use('/auth', authRouter)
 
 app.get('/health', (req, res) => res.json({ status: 'ok', app: 'Кабарман API' }))
