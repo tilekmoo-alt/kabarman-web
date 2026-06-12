@@ -2,57 +2,25 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const pool = require('../db/pool')
 
-const CLIENT_ID     = process.env.GOOGLE_CLIENT_ID
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
-const BACKEND_URL   = process.env.BACKEND_URL || 'https://prolific-purpose-production-12cc.up.railway.app'
-const REDIRECT_URI  = `${BACKEND_URL}/auth/google/callback`
-const JWT_SECRET    = process.env.JWT_SECRET || 'kabarman_secret_change_me'
-const FRONTEND_URL  = process.env.FRONTEND_URL || 'https://kabarman.kg'
+const JWT_SECRET   = process.env.JWT_SECRET || 'kabarman_secret_change_me'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://kabarman.kg'
 
-// GET /auth/google — редирект на Google
-router.get('/google', (req, res) => {
-  const params = new URLSearchParams({
-    client_id:     CLIENT_ID,
-    redirect_uri:  REDIRECT_URI,
-    response_type: 'code',
-    scope:         'openid email profile',
-    prompt:        'select_account',
-  })
-  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`)
-})
-
-// GET /auth/google/callback — Google возвращает code
-router.get('/google/callback', async (req, res) => {
-  const { code, error } = req.query
-  console.log('[auth] callback received, code:', !!code, 'error:', error)
-  console.log('[auth] CLIENT_ID set:', !!CLIENT_ID, 'CLIENT_SECRET set:', !!CLIENT_SECRET)
-  console.log('[auth] REDIRECT_URI:', REDIRECT_URI)
-  if (error || !code) return res.redirect(`${FRONTEND_URL}/?auth=error`)
+// POST /api/auth/google-verify — получаем access_token от фронта, проверяем у Google
+router.post('/google-verify', async (req, res) => {
+  const { access_token } = req.body
+  if (!access_token) return res.status(400).json({ error: 'Нет токена' })
 
   try {
-    // Меняем code на токен
-    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        code,
-        client_id:     CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        redirect_uri:  REDIRECT_URI,
-        grant_type:    'authorization_code',
-      }),
-    })
-    const tokenData = await tokenRes.json()
-    console.log('[auth] tokenData keys:', Object.keys(tokenData), 'error:', tokenData.error)
-    if (!tokenData.access_token) return res.redirect(`${FRONTEND_URL}/?auth=error`)
-
-    // Получаем данные пользователя
+    // Получаем данные пользователя от Google
     const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+      headers: { Authorization: `Bearer ${access_token}` },
     })
-    const googleUser = await userRes.json()
+    if (!userRes.ok) return res.status(401).json({ error: 'Токен Google недействителен' })
 
-    // Создаём или находим пользователя в БД
+    const googleUser = await userRes.json()
+    console.log('[auth] Google user:', googleUser.email)
+
+    // Создаём или обновляем пользователя в БД
     const result = await pool.query(`
       INSERT INTO users (google_id, email, name, avatar_url)
       VALUES ($1, $2, $3, $4)
@@ -70,24 +38,14 @@ router.get('/google/callback', async (req, res) => {
       { expiresIn: '30d' }
     )
 
-    // Редиректим на фронт с токеном
-    res.redirect(`${FRONTEND_URL}/?token=${token}`)
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar_url } })
   } catch (err) {
-    console.error('Auth error:', err)
-    res.status(500).send(`<pre style="font-size:14px;padding:20px">
-AUTH ERROR: ${err.message}
-
-REDIRECT_URI: ${REDIRECT_URI}
-CLIENT_ID set: ${!!CLIENT_ID}
-CLIENT_SECRET set: ${!!CLIENT_SECRET}
-NODE version: ${process.version}
-
-Stack: ${err.stack}
-</pre>`)
+    console.error('[auth] google-verify error:', err)
+    res.status(500).json({ error: 'Ошибка авторизации' })
   }
 })
 
-// GET /auth/me — текущий пользователь
+// GET /api/auth/me — текущий пользователь по JWT
 router.get('/me', (req, res) => {
   const auth = req.headers.authorization
   if (!auth?.startsWith('Bearer ')) return res.status(401).json({ error: 'Не авторизован' })

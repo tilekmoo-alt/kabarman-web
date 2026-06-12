@@ -1,31 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
 
 const AuthContext = createContext(null)
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
-export function AuthProvider({ children }) {
+function AuthProviderInner({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loginCallback, setLoginCallback] = useState(null)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const token = params.get('token')
-    const authError = params.get('auth')
-
-    if (token) {
-      localStorage.setItem('kabarman_token', token)
-      window.history.replaceState({}, '', window.location.pathname)
-      // Возвращаемся туда откуда пришли
-      const redirect = localStorage.getItem('kabarman_redirect')
-      if (redirect) {
-        localStorage.removeItem('kabarman_redirect')
-        window.location.replace(redirect)
-        return
-      }
-    }
-    if (authError) {
-      window.history.replaceState({}, '', window.location.pathname)
-    }
-
     const stored = localStorage.getItem('kabarman_token')
     if (stored) {
       fetchMe(stored)
@@ -36,12 +20,12 @@ export function AuthProvider({ children }) {
 
   const fetchMe = async (token) => {
     try {
-      const res = await fetch('/auth/me', {
+      const apiUrl = import.meta.env.VITE_API_URL || '/api'
+      const res = await fetch(`${apiUrl}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) {
-        const data = await res.json()
-        setUser(data)
+        setUser(await res.json())
       } else {
         localStorage.removeItem('kabarman_token')
       }
@@ -52,9 +36,25 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const login = () => {
-    localStorage.setItem('kabarman_redirect', window.location.pathname)
-    window.location.href = '/auth/google'
+  const handleGoogleSuccess = async (tokenResponse) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '/api'
+      const res = await fetch(`${apiUrl}/auth/google-verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ access_token: tokenResponse.access_token })
+      })
+      if (!res.ok) throw new Error('Auth failed')
+      const data = await res.json()
+      localStorage.setItem('kabarman_token', data.token)
+      setUser(data.user)
+      if (loginCallback) {
+        loginCallback()
+        setLoginCallback(null)
+      }
+    } catch (err) {
+      console.error('Google auth error:', err)
+    }
   }
 
   const logout = () => {
@@ -63,9 +63,24 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, logout, handleGoogleSuccess, setLoginCallback }}>
       {children}
     </AuthContext.Provider>
+  )
+}
+
+export function AuthProvider({ children }) {
+  if (!GOOGLE_CLIENT_ID) {
+    return (
+      <AuthContext.Provider value={{ user: null, loading: false, logout: () => {}, handleGoogleSuccess: () => {}, setLoginCallback: () => {} }}>
+        {children}
+      </AuthContext.Provider>
+    )
+  }
+  return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AuthProviderInner>{children}</AuthProviderInner>
+    </GoogleOAuthProvider>
   )
 }
 

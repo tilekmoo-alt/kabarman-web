@@ -16,18 +16,11 @@ app.set('trust proxy', 1)
 app.use(cors({ origin: process.env.FRONTEND_URL || '*', credentials: true }))
 app.use(express.json())
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200 }))
-app.use((req, res, next) => { console.log(`[req] ${req.method} ${req.path}`); next() })
 
 app.use('/api/providers', providersRouter)
 app.use('/api/listings', listingsRouter)
+app.use('/api/auth', authRouter)
 app.use('/api', miscRouter)
-
-// Inline auth callback — bypass router to debug routing issue
-app.get('/auth/google/callback', (req, res) => {
-  res.send(`<pre>INLINE CALLBACK HIT\ncode: ${!!req.query.code}\npath: ${req.path}</pre>`)
-})
-
-app.use('/auth', authRouter)
 
 app.get('/health', (req, res) => res.json({ status: 'ok', app: 'Кабарман API' }))
 
