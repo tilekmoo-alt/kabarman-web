@@ -25,10 +25,11 @@ router.get('/google', (req, res) => {
 router.get('/google/callback', async (req, res) => {
   const { code, error } = req.query
   console.log('[auth] callback received, code:', !!code, 'error:', error)
+  console.log('[auth] CLIENT_ID set:', !!CLIENT_ID, 'CLIENT_SECRET set:', !!CLIENT_SECRET)
+  console.log('[auth] REDIRECT_URI:', REDIRECT_URI)
   if (error || !code) return res.redirect(`${FRONTEND_URL}/?auth=error`)
 
   try {
-    console.log('[auth] exchanging code, REDIRECT_URI:', REDIRECT_URI)
     // Меняем code на токен
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
@@ -42,6 +43,7 @@ router.get('/google/callback', async (req, res) => {
       }),
     })
     const tokenData = await tokenRes.json()
+    console.log('[auth] tokenData keys:', Object.keys(tokenData), 'error:', tokenData.error)
     if (!tokenData.access_token) return res.redirect(`${FRONTEND_URL}/?auth=error`)
 
     // Получаем данные пользователя
