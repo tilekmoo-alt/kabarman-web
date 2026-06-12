@@ -7,21 +7,25 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Подхватываем токен из URL после Google redirect
     const params = new URLSearchParams(window.location.search)
     const token = params.get('token')
     const authError = params.get('auth')
 
     if (token) {
       localStorage.setItem('kabarman_token', token)
-      // Убираем токен из URL
       window.history.replaceState({}, '', window.location.pathname)
+      // Возвращаемся туда откуда пришли
+      const redirect = localStorage.getItem('kabarman_redirect')
+      if (redirect) {
+        localStorage.removeItem('kabarman_redirect')
+        window.location.replace(redirect)
+        return
+      }
     }
     if (authError) {
       window.history.replaceState({}, '', window.location.pathname)
     }
 
-    // Загружаем пользователя
     const stored = localStorage.getItem('kabarman_token')
     if (stored) {
       fetchMe(stored)
@@ -49,6 +53,7 @@ export function AuthProvider({ children }) {
   }
 
   const login = () => {
+    localStorage.setItem('kabarman_redirect', window.location.pathname)
     window.location.href = '/auth/google'
   }
 

@@ -5,7 +5,7 @@ import styles from './PostChoicePage.module.css'
 export default function PostChoicePage() {
   const { user, loading, login } = useAuth()
 
-  if (loading) return null
+  if (loading) return <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',fontSize:32}}>⏳</div>
 
   if (!user) {
     return (
