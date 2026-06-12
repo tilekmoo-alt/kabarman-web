@@ -74,7 +74,16 @@ router.get('/google/callback', async (req, res) => {
     res.redirect(`${FRONTEND_URL}/?token=${token}`)
   } catch (err) {
     console.error('Auth error:', err)
-    res.redirect(`${FRONTEND_URL}/?auth=error`)
+    res.status(500).send(`<pre style="font-size:14px;padding:20px">
+AUTH ERROR: ${err.message}
+
+REDIRECT_URI: ${REDIRECT_URI}
+CLIENT_ID set: ${!!CLIENT_ID}
+CLIENT_SECRET set: ${!!CLIENT_SECRET}
+NODE version: ${process.version}
+
+Stack: ${err.stack}
+</pre>`)
   }
 })
 
