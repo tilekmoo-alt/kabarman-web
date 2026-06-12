@@ -12,27 +12,50 @@ function InstallModal({ onClose }) {
         <h2 className={styles.modalTitle}>Установить Кабарман</h2>
         <p className={styles.modalSub}>Добавьте приложение на главный экран — работает без интернета и открывается мгновенно</p>
 
-        <div className={styles.modalSteps}>
-          <div className={styles.modalStep}>
-            <div className={styles.stepNum}>1</div>
-            <div>Откройте сайт <b>kabarman.kg</b> в браузере <b>Chrome</b></div>
-          </div>
-          <div className={styles.modalStep}>
-            <div className={styles.stepNum}>2</div>
-            <div>Нажмите <b>⋮</b> (три точки) в правом верхнем углу</div>
-          </div>
-          <div className={styles.modalStep}>
-            <div className={styles.stepNum}>3</div>
-            <div>Выберите <b>«Добавить на главный экран»</b></div>
-          </div>
-          <div className={styles.modalStep}>
-            <div className={styles.stepNum}>4</div>
-            <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
+        <div className={styles.modalPlatform}>
+          <div className={styles.platformLabel}>🤖 Для Android (Chrome)</div>
+          <div className={styles.modalSteps}>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>1</div>
+              <div>Откройте <b>kabarman.kg</b> в браузере <b>Chrome</b></div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>2</div>
+              <div>Нажмите <b>⋮</b> (три точки) в правом верхнем углу</div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>3</div>
+              <div>Выберите <b>«Добавить на главный экран»</b></div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>4</div>
+              <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
+            </div>
           </div>
         </div>
 
-        <div className={styles.modalNote}>
-          🤖 Работает на Android. На iPhone: Safari → кнопка «Поделиться» → «На экран Домой»
+        <div className={styles.modalDivider} />
+
+        <div className={styles.modalPlatform}>
+          <div className={styles.platformLabel}>🍎 Для iPhone (Safari)</div>
+          <div className={styles.modalSteps}>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>1</div>
+              <div>Откройте <b>kabarman.kg</b> в браузере <b>Safari</b></div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>2</div>
+              <div>Нажмите кнопку <b>«Поделиться»</b> внизу экрана (квадрат со стрелкой ↑)</div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>3</div>
+              <div>Прокрутите вниз и выберите <b>«На экран «Домой»»</b></div>
+            </div>
+            <div className={styles.modalStep}>
+              <div className={styles.stepNum}>4</div>
+              <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
+            </div>
+          </div>
         </div>
 
         <button className={styles.modalBtn} onClick={onClose}>Понятно</button>
