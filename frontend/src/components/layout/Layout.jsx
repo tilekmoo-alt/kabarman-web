@@ -1,9 +1,49 @@
+import { useState } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
 import InstallBanner from '../InstallBanner'
 
+function InstallModal({ onClose }) {
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
+        <button className={styles.modalClose} onClick={onClose}>✕</button>
+        <div className={styles.modalIcon}>📲</div>
+        <h2 className={styles.modalTitle}>Установить Кабарман</h2>
+        <p className={styles.modalSub}>Добавьте приложение на главный экран — работает без интернета и открывается мгновенно</p>
+
+        <div className={styles.modalSteps}>
+          <div className={styles.modalStep}>
+            <div className={styles.stepNum}>1</div>
+            <div>Откройте сайт <b>kabarman.kg</b> в браузере <b>Chrome</b></div>
+          </div>
+          <div className={styles.modalStep}>
+            <div className={styles.stepNum}>2</div>
+            <div>Нажмите <b>⋮</b> (три точки) в правом верхнем углу</div>
+          </div>
+          <div className={styles.modalStep}>
+            <div className={styles.stepNum}>3</div>
+            <div>Выберите <b>«Добавить на главный экран»</b></div>
+          </div>
+          <div className={styles.modalStep}>
+            <div className={styles.stepNum}>4</div>
+            <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
+          </div>
+        </div>
+
+        <div className={styles.modalNote}>
+          🤖 Работает на Android. На iPhone: Safari → кнопка «Поделиться» → «На экран Домой»
+        </div>
+
+        <button className={styles.modalBtn} onClick={onClose}>Понятно</button>
+      </div>
+    </div>
+  )
+}
+
 export default function Layout() {
   const loc = useLocation()
+  const [showInstall, setShowInstall] = useState(false)
 
   return (
     <div className={styles.app}>
@@ -19,16 +59,18 @@ export default function Layout() {
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
             <div className={styles.headerBtns}>
-              <Link to="/post" className="btn btn-primary btn-sm">
-                📢 Подать объявление
-              </Link>
-              <a href="https://t.me/kabarmanbot" target="_blank" className="btn btn-outline btn-sm">
-                ✈️ Бот
-              </a>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => setShowInstall(true)}
+              >
+                📲 Установить
+              </button>
             </div>
           </div>
         </div>
       </header>
+
+      {showInstall && <InstallModal onClose={() => setShowInstall(false)} />}
 
       <main className={styles.main}>
         <Outlet />
