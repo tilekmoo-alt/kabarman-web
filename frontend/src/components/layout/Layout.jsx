@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
 import InstallBanner from '../InstallBanner'
+import { useAuth } from '../../context/AuthContext'
 
 function InstallModal({ onClose, deferredPrompt, onInstalled }) {
   const [androidDone, setAndroidDone] = useState(false)
@@ -57,8 +58,10 @@ function InstallModal({ onClose, deferredPrompt, onInstalled }) {
 
 export default function Layout() {
   const loc = useLocation()
+  const { user, login, logout } = useAuth()
   const [showInstall, setShowInstall] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   useEffect(() => {
     const handler = (e) => { e.preventDefault(); setDeferredPrompt(e) }
@@ -80,12 +83,30 @@ export default function Layout() {
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
             <div className={styles.headerBtns}>
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={() => setShowInstall(true)}
-              >
+              <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
                 📲 Установить
               </button>
+              {user ? (
+                <div className={styles.userMenu}>
+                  <button className={styles.userBtn} onClick={() => setShowUserMenu(v => !v)}>
+                    {user.avatar
+                      ? <img src={user.avatar} className={styles.userAvatar} alt="" />
+                      : <span className={styles.userInitial}>{user.name?.[0]}</span>
+                    }
+                  </button>
+                  {showUserMenu && (
+                    <div className={styles.userDropdown}>
+                      <div className={styles.userDropName}>{user.name}</div>
+                      <Link to="/my-listings" className={styles.userDropItem} onClick={() => setShowUserMenu(false)}>📢 Мои объявления</Link>
+                      <button className={styles.userDropLogout} onClick={() => { logout(); setShowUserMenu(false) }}>Выйти</button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button className="btn btn-outline btn-sm" onClick={login}>
+                  Войти
+                </button>
+              )}
             </div>
           </div>
         </div>

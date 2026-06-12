@@ -79,6 +79,49 @@
   color: rgba(255,255,255,0.35);
 }
 
+/* ── User Menu ── */
+.userMenu { position: relative; }
+.userBtn {
+  background: none; border: none; cursor: pointer;
+  padding: 0; display: flex; align-items: center;
+}
+.userAvatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--green);
+}
+.userInitial {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--green); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px;
+}
+.userDropdown {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: white; border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  min-width: 200px; padding: 8px;
+  z-index: 200;
+}
+.userDropName {
+  padding: 8px 12px 10px; font-weight: 600;
+  font-size: 14px; border-bottom: 1px solid #eee; margin-bottom: 4px;
+}
+.userDropItem {
+  display: block; padding: 10px 12px;
+  font-size: 14px; color: var(--dark);
+  text-decoration: none; border-radius: 8px;
+  transition: background 0.12s;
+}
+.userDropItem:hover { background: #f5f5f5; }
+.userDropLogout {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 12px; font-size: 14px; color: #e53e3e;
+  background: none; border: none; cursor: pointer;
+  border-radius: 8px; margin-top: 4px;
+  border-top: 1px solid #eee;
+}
+.userDropLogout:hover { background: #fff5f5; }
+
 /* ── Install Modal ── */
 .modalOverlay {
   position: fixed; inset: 0; z-index: 1000;

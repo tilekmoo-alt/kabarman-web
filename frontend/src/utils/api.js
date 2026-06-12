@@ -6,7 +6,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(cfg => {
-  const token = localStorage.getItem('kabarman_admin_token')
+  const token = localStorage.getItem('kabarman_token') || localStorage.getItem('kabarman_admin_token')
   if (token) cfg.headers.Authorization = `Bearer ${token}`
   return cfg
 })
@@ -25,6 +25,8 @@ export const listingsApi = {
   getOne:       (id)        => api.get(`/listings/${id}`),
   getCategories:()          => api.get('/listings/categories'),
   create:       (data)      => api.post('/listings', data),
+  getMine:      ()          => api.get('/listings/mine'),
+  deleteMine:   (id)        => api.delete(`/listings/${id}/mine`),
   uploadPhotos: (formData)  => api.post('/listings/photos', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })

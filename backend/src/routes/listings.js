@@ -3,6 +3,7 @@ const pool = require('../db/pool')
 const multer = require('multer')
 const sharp = require('sharp')
 const { uploadToR2 } = require('../utils/r2')
+const authUser = require('../middleware/authUser')
 
 async function notifyAdminsNewListing(listingId, l) {
   const token = process.env.BOT_TOKEN
@@ -125,6 +126,37 @@ router.post('/photos', upload.array('photos', 5), async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Ошибка загрузки фото' })
+  }
+})
+
+// GET /api/listings/mine — мои объявления
+router.get('/mine', authUser, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT l.*, o.name AS oblast_name, d.name AS district_name
+      FROM listings l
+      LEFT JOIN oblasts o ON l.oblast_id = o.id
+      LEFT JOIN districts d ON l.district_id = d.id
+      WHERE l.user_id = $1 AND l.is_active = true
+      ORDER BY l.created_at DESC
+    `, [req.user.id])
+    res.json(result.rows)
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка сервера' })
+  }
+})
+
+// DELETE /api/listings/:id/mine — удалить своё объявление
+router.delete('/:id/mine', authUser, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `UPDATE listings SET is_active = false WHERE id = $1 AND user_id = $2 RETURNING id`,
+      [req.params.id, req.user.id]
+    )
+    if (!result.rows.length) return res.status(404).json({ error: 'Не найдено' })
+    res.json({ ok: true })
+  } catch (err) {
+    res.status(500).json({ error: 'Ошибка сервера' })
   }
 })
 
