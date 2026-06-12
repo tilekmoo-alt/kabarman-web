@@ -5,6 +5,21 @@
   padding: 40px 0;
 }
 
+.loginPrompt {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 40px 0;
+}
+.loginIcon { font-size: 56px; margin-bottom: 16px; }
+.googleBtn {
+  display: flex; align-items: center; gap: 10px;
+  background: white; border: 2px solid #ddd;
+  border-radius: 12px; padding: 14px 28px;
+  font-size: 16px; font-weight: 600; color: #333;
+  cursor: pointer; margin-top: 24px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.googleBtn:hover { border-color: #aaa; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+
 .title {
   font-size: 28px;
   font-weight: 700;

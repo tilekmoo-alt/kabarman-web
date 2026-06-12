@@ -86,7 +86,7 @@ export default function Layout() {
               <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
                 📲 Установить
               </button>
-              {user ? (
+              {user && (
                 <div className={styles.userMenu}>
                   <button className={styles.userBtn} onClick={() => setShowUserMenu(v => !v)}>
                     {user.avatar
@@ -102,10 +102,6 @@ export default function Layout() {
                     </div>
                   )}
                 </div>
-              ) : (
-                <button className="btn btn-outline btn-sm" onClick={login}>
-                  Войти
-                </button>
               )}
             </div>
           </div>

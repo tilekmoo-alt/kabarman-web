@@ -1,7 +1,30 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import styles from './PostChoicePage.module.css'
 
 export default function PostChoicePage() {
+  const { user, loading, login } = useAuth()
+
+  if (loading) return null
+
+  if (!user) {
+    return (
+      <div className={styles.page}>
+        <div className="container">
+          <div className={styles.loginPrompt}>
+            <div className={styles.loginIcon}>🔐</div>
+            <h1 className={styles.title}>Войдите чтобы подать объявление</h1>
+            <p className={styles.sub}>Это бесплатно и займёт 10 секунд</p>
+            <button className={styles.googleBtn} onClick={login}>
+              <img src="https://www.google.com/favicon.ico" alt="" width={18} height={18} />
+              Войти через Google
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.page}>
       <div className="container">
