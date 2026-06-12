@@ -125,8 +125,21 @@
 }
 .modalDivider {
   border: none; border-top: 1px solid #eee;
-  margin: 16px 0;
+  margin: 20px 0;
 }
+.iosSteps { display: flex; flex-direction: column; gap: 10px; }
+.iosStep { font-size: 14px; line-height: 1.5; color: #444; }
+.modalNote {
+  background: #f5f5f5; border-radius: 10px;
+  padding: 12px 14px; font-size: 14px; color: #555; line-height: 1.5;
+}
+.modalBtnOutline {
+  width: 100%; background: none; color: #888;
+  border: 1.5px solid #ddd; border-radius: 12px; padding: 12px;
+  font-size: 15px; cursor: pointer; margin-top: 20px;
+  transition: border-color 0.15s;
+}
+.modalBtnOutline:hover { border-color: #aaa; color: #555; }
 .modalBtn {
   width: 100%; background: var(--green); color: white;
   border: none; border-radius: 12px; padding: 14px;

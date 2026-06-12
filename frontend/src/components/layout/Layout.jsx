@@ -1,64 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
 import InstallBanner from '../InstallBanner'
 
-function InstallModal({ onClose }) {
+function InstallModal({ onClose, deferredPrompt, onInstalled }) {
+  const handleAndroidInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt()
+      const { outcome } = await deferredPrompt.userChoice
+      if (outcome === 'accepted') onInstalled()
+      onClose()
+    }
+  }
+
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <button className={styles.modalClose} onClick={onClose}>✕</button>
         <div className={styles.modalIcon}>📲</div>
         <h2 className={styles.modalTitle}>Установить Кабарман</h2>
-        <p className={styles.modalSub}>Добавьте приложение на главный экран — работает без интернета и открывается мгновенно</p>
 
         <div className={styles.modalPlatform}>
-          <div className={styles.platformLabel}>🤖 Для Android (Chrome)</div>
-          <div className={styles.modalSteps}>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>1</div>
-              <div>Откройте <b>kabarman.kg</b> в браузере <b>Chrome</b></div>
+          <div className={styles.platformLabel}>🤖 Для Android</div>
+          {deferredPrompt ? (
+            <button className={styles.modalBtn} onClick={handleAndroidInstall}>
+              Установить приложение
+            </button>
+          ) : (
+            <div className={styles.modalNote}>
+              Откройте сайт в <b>Chrome</b>, затем нажмите <b>⋮ → Добавить на главный экран</b>
             </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>2</div>
-              <div>Нажмите <b>⋮</b> (три точки) в правом верхнем углу</div>
-            </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>3</div>
-              <div>Выберите <b>«Добавить на главный экран»</b></div>
-            </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>4</div>
-              <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className={styles.modalDivider} />
 
         <div className={styles.modalPlatform}>
-          <div className={styles.platformLabel}>🍎 Для iPhone (Safari)</div>
-          <div className={styles.modalSteps}>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>1</div>
-              <div>Откройте <b>kabarman.kg</b> в браузере <b>Safari</b></div>
-            </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>2</div>
-              <div>Нажмите кнопку <b>«Поделиться»</b> внизу экрана (квадрат со стрелкой ↑)</div>
-            </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>3</div>
-              <div>Прокрутите вниз и выберите <b>«На экран «Домой»»</b></div>
-            </div>
-            <div className={styles.modalStep}>
-              <div className={styles.stepNum}>4</div>
-              <div>Нажмите <b>«Добавить»</b> — иконка появится на рабочем столе</div>
-            </div>
+          <div className={styles.platformLabel}>🍎 Для iPhone</div>
+          <div className={styles.iosSteps}>
+            <div className={styles.iosStep}>1. Откройте сайт в браузере <b>Safari</b></div>
+            <div className={styles.iosStep}>2. Нажмите кнопку <b>↑</b> («Поделиться») внизу экрана</div>
+            <div className={styles.iosStep}>3. Выберите <b>«На экран "Домой"»</b> и нажмите <b>«Добавить»</b></div>
           </div>
         </div>
 
-        <button className={styles.modalBtn} onClick={onClose}>Понятно</button>
+        <button className={styles.modalBtnOutline} onClick={onClose}>Закрыть</button>
       </div>
     </div>
   )
@@ -67,6 +53,13 @@ function InstallModal({ onClose }) {
 export default function Layout() {
   const loc = useLocation()
   const [showInstall, setShowInstall] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState(null)
+
+  useEffect(() => {
+    const handler = (e) => { e.preventDefault(); setDeferredPrompt(e) }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
 
   return (
     <div className={styles.app}>
@@ -93,7 +86,13 @@ export default function Layout() {
         </div>
       </header>
 
-      {showInstall && <InstallModal onClose={() => setShowInstall(false)} />}
+      {showInstall && (
+        <InstallModal
+          onClose={() => setShowInstall(false)}
+          deferredPrompt={deferredPrompt}
+          onInstalled={() => setDeferredPrompt(null)}
+        />
+      )}
 
       <main className={styles.main}>
         <Outlet />
