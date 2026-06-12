@@ -31,9 +31,9 @@ function InstallModal({ onClose, deferredPrompt, onInstalled }) {
             </button>
           ) : (
             <div className={styles.iosSteps}>
-              <div className={styles.iosStep}>1. Откройте сайт в браузере <b>Chrome</b></div>
-              <div className={styles.iosStep}>2. Нажмите <b>⋮</b> (три точки) справа вверху</div>
-              <div className={styles.iosStep}>3. Выберите <b>«Добавить на главный экран»</b></div>
+              <div className={styles.iosStep}><span className={styles.stepNum}>1</span><span>Откройте сайт в браузере <b>Chrome</b></span></div>
+              <div className={styles.iosStep}><span className={styles.stepNum}>2</span><span>Нажмите <b>⋮</b> (три точки) справа вверху</span></div>
+              <div className={styles.iosStep}><span className={styles.stepNum}>3</span><span>Выберите <b>«Добавить на главный экран»</b></span></div>
             </div>
           )}
         </div>
@@ -43,9 +43,9 @@ function InstallModal({ onClose, deferredPrompt, onInstalled }) {
         <div className={styles.modalPlatform}>
           <div className={styles.platformLabel}>🍎 Для iPhone</div>
           <div className={styles.iosSteps}>
-            <div className={styles.iosStep}>1. Откройте сайт в браузере <b>Safari</b></div>
-            <div className={styles.iosStep}>2. Нажмите кнопку <b>↑</b> («Поделиться») внизу экрана</div>
-            <div className={styles.iosStep}>3. Выберите <b>«На экран "Домой"»</b> и нажмите <b>«Добавить»</b></div>
+            <div className={styles.iosStep}><span className={styles.stepNum}>1</span><span>Откройте сайт в браузере <b>Safari</b></span></div>
+            <div className={styles.iosStep}><span className={styles.stepNum}>2</span><span>Нажмите кнопку <b>↑</b> («Поделиться») внизу экрана</span></div>
+            <div className={styles.iosStep}><span className={styles.stepNum}>3</span><span>Выберите <b>«На экран "Домой"»</b> и нажмите <b>«Добавить»</b></span></div>
           </div>
         </div>
 
