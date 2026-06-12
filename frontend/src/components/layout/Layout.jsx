@@ -83,7 +83,7 @@ export default function Layout() {
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
             <div className={styles.headerBtns}>
-              <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
+              <button className={`btn btn-primary btn-sm ${styles.installBtn}`} onClick={() => setShowInstall(true)}>
                 📲 Установить
               </button>
               {user && (
