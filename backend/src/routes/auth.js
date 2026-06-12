@@ -4,7 +4,8 @@ const pool = require('../db/pool')
 
 const CLIENT_ID     = process.env.GOOGLE_CLIENT_ID
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
-const REDIRECT_URI  = 'https://kabarman.kg/auth/google/callback'
+const BACKEND_URL   = process.env.BACKEND_URL || 'https://prolific-purpose-production-12cc.up.railway.app'
+const REDIRECT_URI  = `${BACKEND_URL}/auth/google/callback`
 const JWT_SECRET    = process.env.JWT_SECRET || 'kabarman_secret_change_me'
 const FRONTEND_URL  = process.env.FRONTEND_URL || 'https://kabarman.kg'
 
