@@ -4,12 +4,15 @@ import styles from './Layout.module.css'
 import InstallBanner from '../InstallBanner'
 
 function InstallModal({ onClose, deferredPrompt, onInstalled }) {
+  const [androidDone, setAndroidDone] = useState(false)
+
   const handleAndroidInstall = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt()
       const { outcome } = await deferredPrompt.userChoice
-      if (outcome === 'accepted') onInstalled()
-      onClose()
+      if (outcome === 'accepted') { onInstalled(); onClose() }
+    } else {
+      setAndroidDone(true)
     }
   }
 
@@ -22,13 +25,15 @@ function InstallModal({ onClose, deferredPrompt, onInstalled }) {
 
         <div className={styles.modalPlatform}>
           <div className={styles.platformLabel}>🤖 Для Android</div>
-          {deferredPrompt ? (
+          {!androidDone ? (
             <button className={styles.modalBtn} onClick={handleAndroidInstall}>
               Установить приложение
             </button>
           ) : (
-            <div className={styles.modalNote}>
-              Откройте сайт в <b>Chrome</b>, затем нажмите <b>⋮ → Добавить на главный экран</b>
+            <div className={styles.iosSteps}>
+              <div className={styles.iosStep}>1. Откройте сайт в браузере <b>Chrome</b></div>
+              <div className={styles.iosStep}>2. Нажмите <b>⋮</b> (три точки) справа вверху</div>
+              <div className={styles.iosStep}>3. Выберите <b>«Добавить на главный экран»</b></div>
             </div>
           )}
         </div>
