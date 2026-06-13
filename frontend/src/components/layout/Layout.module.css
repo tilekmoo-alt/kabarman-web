@@ -197,5 +197,4 @@
   .footerLinks { grid-template-columns: 1fr 1fr; }
   .headerBtns { gap: 6px; }
   .headerBtns .btn { font-size: 12px; padding: 7px 10px; }
-  .installBtn { display: none !important; }
 }
