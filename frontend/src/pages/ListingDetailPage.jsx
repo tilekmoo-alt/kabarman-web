@@ -49,11 +49,26 @@ export default function ListingDetailPage() {
           <div className={styles.gallery}>
             {listing.photos?.length > 0 ? (
               <>
-                <img
-                  src={listing.photos[photo]}
-                  alt={listing.title}
-                  className={styles.mainPhoto}
-                />
+                <div className={styles.photoWrap}>
+                  <img
+                    src={listing.photos[photo]}
+                    alt={listing.title}
+                    className={styles.mainPhoto}
+                  />
+                  {listing.photos.length > 1 && (
+                    <>
+                      <button
+                        className={`${styles.arrow} ${styles.arrowLeft}`}
+                        onClick={() => setPhoto(i => (i - 1 + listing.photos.length) % listing.photos.length)}
+                      >‹</button>
+                      <button
+                        className={`${styles.arrow} ${styles.arrowRight}`}
+                        onClick={() => setPhoto(i => (i + 1) % listing.photos.length)}
+                      >›</button>
+                      <div className={styles.photoCount}>{photo + 1} / {listing.photos.length}</div>
+                    </>
+                  )}
+                </div>
                 {listing.photos.length > 1 && (
                   <div className={styles.thumbs}>
                     {listing.photos.map((url, i) => (
