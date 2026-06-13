@@ -65,10 +65,10 @@
   position: absolute; top: calc(100% + 8px); left: 0;
   background: white; border-radius: 14px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  min-width: 440px; padding: 8px;
+  min-width: 220px; padding: 8px;
   z-index: 100;
   animation: fadeDown 0.15s ease;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  max-height: 320px; overflow-y: auto;
 }
 @keyframes fadeDown {
   from { opacity: 0; transform: translateY(-6px); }
@@ -260,7 +260,7 @@
   .searchRow { flex-direction: column; gap: 8px; max-width: 100%; }
   .catDropWrap { width: 100%; }
   .catDropBtn { width: 100%; justify-content: space-between; padding: 11px 14px; font-size: 14px; box-sizing: border-box; }
-  .catDropMenu { width: 100%; min-width: unset; grid-template-columns: 1fr; }
+  .catDropMenu { width: 100%; min-width: unset; }
   .searchBox { width: 100%; }
 }
 @media (max-width: 480px) {
