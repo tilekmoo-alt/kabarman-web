@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
-import InstallBanner from '../InstallBanner'
 
 function InstallModal({ onClose, deferredPrompt, onInstalled }) {
   const [androidDone, setAndroidDone] = useState(false)
@@ -99,8 +98,6 @@ export default function Layout() {
       <main className={styles.main}>
         <Outlet />
       </main>
-
-      <InstallBanner />
 
       <footer className={styles.footer}>
         <div className="container">
