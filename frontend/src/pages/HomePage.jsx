@@ -107,7 +107,7 @@ export default function HomePage() {
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  placeholder="Поиск: Toyota, iPhone, сантехник..."
+                  placeholder="Что ищете?"
                   className={styles.searchInput}
                 />
                 <button type="submit" className={styles.searchBtn}>🔍 Найти</button>
