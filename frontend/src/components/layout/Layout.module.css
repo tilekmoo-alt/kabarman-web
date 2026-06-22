@@ -24,6 +24,15 @@
   mix-blend-mode: multiply;
 }
 
+.backBtn {
+  background: none; border: none; cursor: pointer;
+  font-size: 22px; color: var(--dark);
+  padding: 6px 10px; border-radius: 8px;
+  line-height: 1; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.backBtn:hover { background: var(--green-pale); color: var(--green); }
+
 .nav { display: flex; gap: 4px; flex: 1; }
 .nav a {
   padding: 8px 18px; border-radius: 8px;

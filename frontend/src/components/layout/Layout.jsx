@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Outlet, Link, useLocation } from 'react-router-dom'
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './Layout.module.css'
 
 function InstallModal({ onClose, deferredPrompt, onInstalled }) {
@@ -56,8 +56,10 @@ function InstallModal({ onClose, deferredPrompt, onInstalled }) {
 
 export default function Layout() {
   const loc = useLocation()
+  const navigate = useNavigate()
   const [showInstall, setShowInstall] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
+  const isHome = loc.pathname === '/'
 
   useEffect(() => {
     const handler = (e) => { e.preventDefault(); setDeferredPrompt(e) }
@@ -70,6 +72,11 @@ export default function Layout() {
       <header className={styles.header}>
         <div className="container">
           <div className={styles.headerInner}>
+            {!isHome && (
+              <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                ←
+              </button>
+            )}
             <Link to="/" className={styles.logo}>
               <img src="/logo-icon.png" alt="Kabarman" className={styles.logoImg} />
               <span>KABARMAN</span>
