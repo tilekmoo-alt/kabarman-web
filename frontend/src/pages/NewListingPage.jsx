@@ -115,15 +115,18 @@ export default function NewListingPage() {
 
           <div className={styles.formBody}>
             {step === 0 && (
-              <div className={listStyles.catGrid}>
-                {CATS.map(c => (
-                  <button key={c.name} type="button"
-                    onClick={() => set('category', c.name)}
-                    className={`${listStyles.catTile} ${form.category === c.name ? listStyles.catTileActive : ''}`}>
-                    <span className={listStyles.catEmoji}>{c.emoji}</span>
-                    <span>{c.name}</span>
-                  </button>
-                ))}
+              <div className="form-group">
+                <label className="form-label">Выберите категорию *</label>
+                <select
+                  className="form-select"
+                  value={form.category}
+                  onChange={e => set('category', e.target.value)}
+                >
+                  <option value="">— Выберите категорию —</option>
+                  {CATS.map(c => (
+                    <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
+                  ))}
+                </select>
               </div>
             )}
 
