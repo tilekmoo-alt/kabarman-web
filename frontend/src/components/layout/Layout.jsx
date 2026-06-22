@@ -74,7 +74,7 @@ export default function Layout() {
           <div className={styles.headerInner}>
             {!isHome && (
               <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                ←
+                ❮
               </button>
             )}
             <Link to="/" className={styles.logo}>
