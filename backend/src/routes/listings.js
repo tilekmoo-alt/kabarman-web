@@ -115,6 +115,7 @@ router.post('/photos', upload.array('photos', 5), async (req, res) => {
     const urls = []
     for (const file of req.files) {
       const compressed = await sharp(file.buffer)
+        .rotate()
         .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 82 })
         .toBuffer()
