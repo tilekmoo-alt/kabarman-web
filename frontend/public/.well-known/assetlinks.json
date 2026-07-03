@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "kg.kabarman.app",
+        "sha256_cert_fingerprints": ["41:67:BD:60:56:E1:A2:99:98:8B:32:4A:04:42:DB:10:86:14:36:88:86:71:E5:B7:2A:33:CB:EB:F1:7A:4E:D7"]
+      }
+    }]
