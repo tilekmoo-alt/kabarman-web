@@ -6,7 +6,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(cfg => {
-  const token = localStorage.getItem('kabarman_token') || localStorage.getItem('kabarman_admin_token')
+  const token = localStorage.getItem('kabarman_admin_token') || localStorage.getItem('kabarman_token')
   if (token) cfg.headers.Authorization = `Bearer ${token}`
   return cfg
 })
