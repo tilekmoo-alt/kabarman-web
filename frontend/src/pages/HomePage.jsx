@@ -147,6 +147,9 @@ export default function HomePage() {
             <div className={styles.recentGrid}>
               {recent.map(l => <MiniCard key={l.id} l={l} />)}
             </div>
+            <div style={{ textAlign: 'center', marginTop: 28 }}>
+              <Link to="/listings" className="btn btn-outline">Все объявления →</Link>
+            </div>
           </div>
         </section>
       )}
