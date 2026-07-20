@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { listingsApi } from '../utils/api'
 import { AppContext } from '../App'
@@ -58,16 +58,17 @@ export default function ListingsPage() {
   const [params, setParams] = useSearchParams()
   const [listings, setListings] = useState([])
   const [total, setTotal]       = useState(0)
-  const [loading, setLoading]   = useState(true)
+  const [loading, setLoading]   = useState(false)
+  const [hasMore, setHasMore]   = useState(true)
+  const [page, setPage]         = useState(1)
+  const [filterVersion, setFilterVersion] = useState(0)
+  const sentinelRef = useRef()
 
   const category = params.get('category') || ''
   const oblast   = params.get('oblast')   || ''
   const district = params.get('district') || ''
   const q        = params.get('q')        || ''
-  const page     = parseInt(params.get('page') || '1')
-
   const [searchInput, setSearchInput] = useState(q)
-  const [pages, setPages] = useState(1)
 
   const filteredDistricts = oblast
     ? districts.filter(d => String(d.oblast_id) === oblast)
@@ -77,15 +78,7 @@ export default function ListingsPage() {
     const next = new URLSearchParams(params)
     if (val) next.set(key, val); else next.delete(key)
     if (key === 'oblast') next.delete('district')
-    next.delete('page')
     setParams(next)
-  }
-
-  const setPage = (p) => {
-    const next = new URLSearchParams(params)
-    if (p > 1) next.set('page', p); else next.delete('page')
-    setParams(next)
-    window.scrollTo(0, 0)
   }
 
   const handleSearch = (e) => {
@@ -95,24 +88,52 @@ export default function ListingsPage() {
 
   const hasFilters = category || oblast || district || q
 
+  // При смене фильтров — сбрасываем список и страницу
+  useEffect(() => {
+    setListings([])
+    setPage(1)
+    setHasMore(true)
+    setFilterVersion(v => v + 1)
+  }, [category, oblast, district, q])
+
+  // Загрузка данных
   useEffect(() => {
     setLoading(true)
-    const p = {}
-    if (category)  p.category  = category
-    if (oblast)    p.oblast_id = oblast
+    const p = { page, limit: 20 }
+    if (category) p.category = category
+    if (oblast)   p.oblast_id = oblast
     if (district) {
       const d = districts.find(d => d.name === district)
       if (d) p.district_id = d.id
     }
     if (q) p.q = q
 
-    p.page = page
-    p.limit = 20
     listingsApi.getAll(p)
-      .then(r => { setListings(r.data.listings); setTotal(r.data.total); setPages(r.data.pages || 1) })
+      .then(r => {
+        const newItems = r.data.listings || []
+        setListings(prev => page === 1 ? newItems : [...prev, ...newItems])
+        setTotal(r.data.total || 0)
+        setHasMore(page < (r.data.pages || 1))
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [category, oblast, district, q, page])
+  }, [filterVersion, page])
+
+  // IntersectionObserver — загружает следующую страницу при скролле
+  useEffect(() => {
+    const el = sentinelRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasMore && !loading) {
+          setPage(p => p + 1)
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [hasMore, loading])
 
   return (
     <div className={styles.page}>
@@ -126,7 +147,6 @@ export default function ListingsPage() {
           <Link to="/listings/new" className="btn btn-primary">+ Подать объявление</Link>
         </div>
 
-        {/* Поиск */}
         <form onSubmit={handleSearch} className={styles.searchRow}>
           <input
             value={searchInput}
@@ -143,7 +163,6 @@ export default function ListingsPage() {
           )}
         </form>
 
-        {/* Категории */}
         <div className={styles.catRow}>
           <button onClick={() => setFilter('category', '')}
             className={`${styles.catBtn} ${!category ? styles.catActive : ''}`}>
@@ -157,7 +176,6 @@ export default function ListingsPage() {
           ))}
         </div>
 
-        {/* Фильтры */}
         <div className={styles.filters}>
           <select value={oblast} onChange={e => setFilter('oblast', e.target.value)} className="form-select">
             <option value="">Все области</option>
@@ -175,7 +193,7 @@ export default function ListingsPage() {
         </div>
 
         <div className={styles.resultsLine}>
-          {loading
+          {loading && page === 1
             ? 'Загрузка...'
             : q
             ? `По запросу «${q}»: ${total}`
@@ -195,12 +213,15 @@ export default function ListingsPage() {
           </div>
         )}
 
-        {pages > 1 && (
-          <div className={styles.pagination}>
-            <button className={styles.pageBtn} onClick={() => setPage(page - 1)} disabled={page <= 1}>← Назад</button>
-            <span className={styles.pageInfo}>{page} / {pages}</span>
-            <button className={styles.pageBtn} onClick={() => setPage(page + 1)} disabled={page >= pages}>Вперёд →</button>
-          </div>
+        {/* Sentinel для IntersectionObserver */}
+        <div ref={sentinelRef} />
+
+        {loading && page > 1 && (
+          <div className={styles.loadingMore}>Загрузка...</div>
+        )}
+
+        {!hasMore && listings.length > 0 && (
+          <div className={styles.endMsg}>Все объявления загружены</div>
         )}
 
       </div>
