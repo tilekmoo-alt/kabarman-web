@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
     const { category, oblast_id, district_id, q, page = 1, limit = 20 } = req.query
     const offset = (page - 1) * limit
     const params = []
-    const conditions = ['l.is_active = true', 'l.expires_at > NOW()']
+    const conditions = ['l.is_active = true', '(l.expires_at IS NULL OR l.expires_at > NOW())']
 
     if (category) { params.push(category); conditions.push(`l.category = $${params.length}`) }
     if (oblast_id) { params.push(parseInt(oblast_id)); conditions.push(`l.oblast_id = $${params.length}`) }
