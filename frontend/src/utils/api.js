@@ -33,12 +33,14 @@ export const listingsApi = {
 }
 
 export const adminApi = {
-  login:       (data)  => api.post('/admin/login', data),
-  getStats:    ()      => api.get('/admin/stats'),
-  getPending:  ()      => api.get('/admin/pending'),
-  approve:     (id)    => api.patch(`/providers/${id}/approve`),
-  reject:      (id)    => api.patch(`/providers/${id}/reject`),
-  delete:      (id)    => api.delete(`/providers/${id}`)
+  login:        (data)    => api.post('/admin/login', data),
+  getStats:     ()        => api.get('/admin/stats'),
+  getPending:   ()        => api.get('/admin/pending'),
+  approve:      (id)      => api.patch(`/providers/${id}/approve`),
+  reject:       (id)      => api.patch(`/providers/${id}/reject`),
+  delete:       (id)      => api.delete(`/providers/${id}`),
+  getListings:  (params)  => api.get('/listings', { params }),
+  bumpListing:  (id)      => api.post(`/listings/${id}/bump`)
 }
 
 export const reportApi = {

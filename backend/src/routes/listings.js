@@ -72,7 +72,7 @@ router.get('/', async (req, res) => {
       LEFT JOIN oblasts o ON l.oblast_id = o.id
       LEFT JOIN districts d ON l.district_id = d.id
       WHERE ${where}
-      ORDER BY l.created_at DESC
+      ORDER BY COALESCE(l.bumped_at, l.created_at) DESC
       LIMIT $${params.length - 1} OFFSET $${params.length}
     `, params)
 
@@ -215,6 +215,22 @@ router.post('/', async (req, res) => {
     const newListing = result.rows[0]
     notifyAdminsNewListing(newListing.id, req.body).catch(() => {})
     res.status(201).json(newListing)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Ошибка сервера' })
+  }
+})
+
+// POST /api/listings/:id/bump — поднять объявление (admin)
+const { authAdmin } = require('../middleware/auth')
+router.post('/:id/bump', authAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'UPDATE listings SET bumped_at = NOW() WHERE id = $1 AND is_active = true RETURNING id',
+      [req.params.id]
+    )
+    if (!result.rows.length) return res.status(404).json({ error: 'Не найдено' })
+    res.json({ ok: true })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Ошибка сервера' })

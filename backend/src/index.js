@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3001
 async function runMigrations() {
   try {
     await pool.query(`ALTER TABLE providers ADD COLUMN IF NOT EXISTS photos JSONB DEFAULT '[]'`)
+    await pool.query(`ALTER TABLE listings ADD COLUMN IF NOT EXISTS bumped_at TIMESTAMPTZ`)
     await pool.query(`
       INSERT INTO categories (name, emoji, is_active, sort_order)
       SELECT 'Попутка', '🚌', true, 99

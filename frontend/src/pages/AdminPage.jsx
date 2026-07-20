@@ -39,6 +39,88 @@ function LoginForm({ onLogin }) {
   )
 }
 
+function ListingsTab() {
+  const [listings, setListings] = useState([])
+  const [loading, setLoading]   = useState(true)
+  const [bumping, setBumping]   = useState(null)
+  const [search, setSearch]     = useState('')
+
+  useEffect(() => {
+    setLoading(true)
+    adminApi.getListings({ limit: 100 })
+      .then(r => setListings(r.data.listings || []))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const bump = async (id) => {
+    setBumping(id)
+    try {
+      await adminApi.bumpListing(id)
+      setListings(prev => {
+        const updated = prev.map(l => l.id === id ? { ...l, bumped_at: new Date().toISOString() } : l)
+        return [...updated].sort((a, b) => {
+          const da = new Date(a.bumped_at || a.created_at)
+          const db = new Date(b.bumped_at || b.created_at)
+          return db - da
+        })
+      })
+    } catch {
+      alert('Ошибка')
+    } finally {
+      setBumping(null)
+    }
+  }
+
+  const filtered = listings.filter(l =>
+    !search || l.title.toLowerCase().includes(search.toLowerCase()) || l.category.toLowerCase().includes(search.toLowerCase())
+  )
+
+  if (loading) return <div className={styles.empty}>Загрузка...</div>
+
+  return (
+    <div>
+      <input
+        className="form-input"
+        placeholder="Поиск по названию или категории..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        style={{ marginBottom: 16 }}
+      />
+      <div className={styles.listingsList}>
+        {filtered.map(l => {
+          const wasBumped = l.bumped_at && new Date(l.bumped_at) > new Date(l.created_at)
+          return (
+            <div key={l.id} className={styles.listingRow}>
+              <div className={styles.listingInfo}>
+                <div className={styles.listingTitle}>{l.title}</div>
+                <div className={styles.listingMeta}>
+                  <span className="badge badge-green">{l.category}</span>
+                  {l.district_name && <span className="badge badge-gray">📍 {l.district_name}</span>}
+                  <span className={styles.listingDate}>
+                    {wasBumped
+                      ? `⬆️ поднято ${new Date(l.bumped_at).toLocaleDateString('ru-RU')}`
+                      : new Date(l.created_at).toLocaleDateString('ru-RU')
+                    }
+                  </span>
+                </div>
+              </div>
+              <button
+                className={styles.btnBump}
+                onClick={() => bump(l.id)}
+                disabled={bumping === l.id}
+              >
+                {bumping === l.id ? '...' : '⬆️ Поднять'}
+              </button>
+            </div>
+          )
+        })}
+        {filtered.length === 0 && <div className={styles.empty}>Ничего не найдено</div>}
+      </div>
+    </div>
+  )
+}
+
 function Dashboard() {
   const [stats, setStats]     = useState(null)
   const [pending, setPending] = useState([])
@@ -71,10 +153,11 @@ function Dashboard() {
 
       <div className="container">
         <div className={styles.tabs}>
-          <button onClick={() => setTab('stats')}   className={tab==='stats'   ? styles.tabActive : styles.tab}>📊 Статистика</button>
-          <button onClick={() => setTab('pending')} className={tab==='pending' ? styles.tabActive : styles.tab}>
+          <button onClick={() => setTab('stats')}    className={tab==='stats'    ? styles.tabActive : styles.tab}>📊 Статистика</button>
+          <button onClick={() => setTab('pending')}  className={tab==='pending'  ? styles.tabActive : styles.tab}>
             ⏳ На проверке {pending.length > 0 && <span className={styles.badge}>{pending.length}</span>}
           </button>
+          <button onClick={() => setTab('listings')} className={tab==='listings' ? styles.tabActive : styles.tab}>📢 Объявления</button>
         </div>
 
         {tab === 'stats' && stats && (
@@ -106,6 +189,8 @@ function Dashboard() {
             </div>
           </div>
         )}
+
+        {tab === 'listings' && <ListingsTab />}
 
         {tab === 'pending' && (
           <div className={styles.pendingList}>
