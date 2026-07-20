@@ -1,8 +1,15 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "kg.kabarman.app",
-        "sha256_cert_fingerprints": ["41:67:BD:60:56:E1:A2:99:98:8B:32:4A:04:42:DB:10:86:14:36:88:86:71:E5:B7:2A:33:CB:EB:F1:7A:4E:D7"]
-      }
-    }]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "kg.kabarman.app",
+      "sha256_cert_fingerprints": [
+        "41:67:BD:60:56:E1:A2:99:98:8B:32:4A:04:42:DB:10:86:14:36:88:86:71:E5:B7:2A:33:CB:EB:F1:7A:4E:D7",
+        "68:DF:D0:35:D6:24:4E:BD:0C:7D:6E:70:17:CB:58:5C:17:DB:B4:96:80:B1:01:5B:AA:16:16:1D:BE:A5:DF:BF"
+      ]
+    }
+  }
+]
