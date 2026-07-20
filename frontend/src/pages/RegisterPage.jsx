@@ -1,7 +1,8 @@
-import { useState, useContext } from 'react'
-import { catalogApi } from '../utils/api'
+import { useState, useContext, useRef } from 'react'
+import { catalogApi, listingsApi } from '../utils/api'
 import { AppContext } from '../App'
 import styles from './RegisterPage.module.css'
+import listStyles from './NewListingPage.module.css'
 
 const STEPS = ['Категория', 'Регион', 'Контакты', 'Описание']
 
@@ -11,12 +12,31 @@ export default function RegisterPage() {
   const [done, setDone]   = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef()
 
   const [form, setForm] = useState({
     name: '', phone: '', category: '', oblast_id: '', district: '',
-    description: '', address: '', social_link: '', tg_username: ''
+    description: '', address: '', social_link: '', tg_username: '', photos: []
   })
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  const handleFiles = async (files) => {
+    if (!files.length) return
+    const remaining = 5 - form.photos.length
+    const toUpload = Array.from(files).slice(0, remaining)
+    setUploading(true)
+    try {
+      const fd = new FormData()
+      toUpload.forEach(f => fd.append('photos', f))
+      const r = await listingsApi.uploadPhotos(fd)
+      set('photos', [...form.photos, ...r.data.urls])
+    } catch {
+      setError('Ошибка загрузки фото. Попробуйте ещё раз.')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   const filteredDistricts = form.oblast_id
     ? districts.filter(d => String(d.oblast_id) === form.oblast_id)
@@ -142,6 +162,26 @@ export default function RegisterPage() {
 
             {step === 3 && (
               <>
+                <div className="form-group">
+                  <label className="form-label">Фото (до 5 штук)</label>
+                  <div className={listStyles.photoGrid}>
+                    {form.photos.map((url, i) => (
+                      <div key={i} className={listStyles.photoThumb}>
+                        <img src={url} alt="" />
+                        <button type="button" onClick={() => set('photos', form.photos.filter((_, j) => j !== i))}>✕</button>
+                      </div>
+                    ))}
+                    {form.photos.length < 5 && (
+                      <button type="button" className={listStyles.photoAdd}
+                        onClick={() => fileRef.current?.click()}
+                        disabled={uploading}>
+                        {uploading ? '⏳' : '+ Фото'}
+                      </button>
+                    )}
+                  </div>
+                  <input ref={fileRef} type="file" accept="image/*" multiple hidden
+                    onChange={e => handleFiles(e.target.files)} />
+                </div>
                 <div className="form-group">
                   <label className="form-label">Описание *</label>
                   <textarea className="form-input" rows={4} value={form.description}

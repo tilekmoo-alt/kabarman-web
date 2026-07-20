@@ -111,6 +111,20 @@
 .empty { text-align: center; padding: 64px 0; color: var(--gray); }
 .empty h3 { font-size: 20px; margin: 12px 0 8px; color: var(--dark); }
 
+.pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 40px;
+}
+.pageBtn {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 10px 20px;
+  font-size: 14px; font-weight: 600; color: var(--dark);
+  cursor: pointer; transition: all 0.15s;
+}
+.pageBtn:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+.pageBtn:disabled { opacity: 0.4; cursor: default; }
+.pageInfo { font-size: 15px; font-weight: 600; color: var(--gray); min-width: 60px; text-align: center; }
+
 @media (max-width: 640px) {
   .header { flex-direction: column; }
   .grid { grid-template-columns: 1fr 1fr; gap: 12px; }

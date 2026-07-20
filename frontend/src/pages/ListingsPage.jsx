@@ -64,8 +64,10 @@ export default function ListingsPage() {
   const oblast   = params.get('oblast')   || ''
   const district = params.get('district') || ''
   const q        = params.get('q')        || ''
+  const page     = parseInt(params.get('page') || '1')
 
   const [searchInput, setSearchInput] = useState(q)
+  const [pages, setPages] = useState(1)
 
   const filteredDistricts = oblast
     ? districts.filter(d => String(d.oblast_id) === oblast)
@@ -75,7 +77,15 @@ export default function ListingsPage() {
     const next = new URLSearchParams(params)
     if (val) next.set(key, val); else next.delete(key)
     if (key === 'oblast') next.delete('district')
+    next.delete('page')
     setParams(next)
+  }
+
+  const setPage = (p) => {
+    const next = new URLSearchParams(params)
+    if (p > 1) next.set('page', p); else next.delete('page')
+    setParams(next)
+    window.scrollTo(0, 0)
   }
 
   const handleSearch = (e) => {
@@ -96,11 +106,13 @@ export default function ListingsPage() {
     }
     if (q) p.q = q
 
+    p.page = page
+    p.limit = 20
     listingsApi.getAll(p)
-      .then(r => { setListings(r.data.listings); setTotal(r.data.total) })
+      .then(r => { setListings(r.data.listings); setTotal(r.data.total); setPages(r.data.pages || 1) })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [category, oblast, district, q])
+  }, [category, oblast, district, q, page])
 
   return (
     <div className={styles.page}>
@@ -180,6 +192,14 @@ export default function ListingsPage() {
         ) : (
           <div className={styles.grid}>
             {listings.map(l => <ListingCard key={l.id} l={l} />)}
+          </div>
+        )}
+
+        {pages > 1 && (
+          <div className={styles.pagination}>
+            <button className={styles.pageBtn} onClick={() => setPage(page - 1)} disabled={page <= 1}>← Назад</button>
+            <span className={styles.pageInfo}>{page} / {pages}</span>
+            <button className={styles.pageBtn} onClick={() => setPage(page + 1)} disabled={page >= pages}>Вперёд →</button>
           </div>
         )}
 

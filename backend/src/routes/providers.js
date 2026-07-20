@@ -94,7 +94,7 @@ router.get('/', async (req, res) => {
 // POST /api/providers — регистрация с сайта
 router.post('/', async (req, res) => {
   try {
-    const { name, phone, category, district, description, address, social_link, tg_username } = req.body
+    const { name, phone, category, district, description, address, social_link, tg_username, photos } = req.body
     if (!name || !phone || !category || !district) {
       return res.status(400).json({ error: 'Заполните обязательные поля' })
     }
@@ -114,10 +114,10 @@ router.post('/', async (req, res) => {
     }
 
     const ins = await pool.query(`
-      INSERT INTO providers (tg_id, name, phone, category_id, district_id, description, address, social_link, tg_username, is_active, is_approved)
-      VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8, true, true)
+      INSERT INTO providers (tg_id, name, phone, category_id, district_id, description, address, social_link, tg_username, photos, is_active, is_approved)
+      VALUES (0,$1,$2,$3,$4,$5,$6,$7,$8,$9, true, true)
       RETURNING id
-    `, [name, phone, catQ.rows[0].id, distQ.rows[0].id, description, address, socialUrl, tg_username])
+    `, [name, phone, catQ.rows[0].id, distQ.rows[0].id, description, address, socialUrl, tg_username, JSON.stringify(photos || [])])
 
     const providerId = ins.rows[0].id
     await notifyAdmins(providerId, { name, phone, category, district, description, address, social_link: socialUrl, tg_username })
