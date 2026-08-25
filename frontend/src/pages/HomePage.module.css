@@ -248,29 +248,39 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .hero { padding: 24px 0 28px; }
+  .hero { padding: 20px 0 22px; }
   .heroLogo { display: none; }
   .heroTag { display: none; }
   .heroSub { display: none; }
-  .heroTitle { font-size: 22px; margin-bottom: 12px; }
-  .actionCards { grid-template-columns: 1fr; gap: 10px; }
-  .actionsSection { padding: 12px 0 0; }
+  .heroTitle { font-size: 20px; margin-bottom: 10px; }
+  .actionCards { grid-template-columns: 1fr; gap: 8px; }
+  .actionsSection { padding: 10px 0 0; }
   .recentGrid { grid-template-columns: repeat(2, 1fr); }
-  .section { padding-top: 16px !important; }
-  .searchRow { flex-direction: column; gap: 8px; max-width: 100%; }
-  .catDropWrap { width: 100%; }
-  .catDropBtn { width: 100%; justify-content: space-between; padding: 11px 14px; font-size: 14px; box-sizing: border-box; }
-  .catDropMenu { width: 100%; min-width: unset; }
-  .searchBox { width: 100%; }
+  .section { padding-top: 14px !important; }
+  .searchRow { flex-direction: row; gap: 8px; max-width: 100%; }
+  .catDropWrap { width: auto; flex-shrink: 0; }
+  .catDropBtn { width: auto; padding: 11px 12px; font-size: 13px; }
+  .catDropMenu { min-width: 200px; }
+  .searchBox { flex: 1; }
 }
 @media (max-width: 480px) {
-  .hero { padding: 18px 0 22px; }
+  .hero { padding: 12px 0 14px; }
+  .heroTitle { font-size: 17px; margin-bottom: 8px; }
+  .catBtnLabel { display: none; }
+  .catDropBtn { padding: 10px 10px; }
   .searchBox { border-radius: 10px; }
-  .searchInput { padding: 11px 12px; font-size: 14px; }
-  .searchBtn { padding: 11px 14px; font-size: 13px; }
-  .actionCard { padding: 14px 16px; }
-  .actionIcon { font-size: 24px; }
-  .actionTitle { font-size: 14px; }
-  .actionSub { font-size: 12px; }
+  .searchInput { padding: 10px 12px; font-size: 14px; }
+  .searchBtn { padding: 10px 14px; font-size: 13px; }
+  .actionCard { padding: 10px 14px; }
+  .actionIcon { font-size: 20px; }
+  .actionTitle { font-size: 13px; }
+  .actionSub { display: none; }
+  .actionArrow { display: none; }
   .recentGrid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .miniImg { height: 100px; }
+  .miniImgEmpty { height: 80px; }
+  .miniBody { padding: 8px; }
+  .miniTitle { font-size: 13px; margin-bottom: 4px; }
+  .miniPrice { font-size: 13px; margin-bottom: 2px; }
+  .sectionHead { margin-bottom: 12px; }
 }

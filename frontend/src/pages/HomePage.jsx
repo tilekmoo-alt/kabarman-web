@@ -82,7 +82,7 @@ export default function HomePage() {
                   className={`${styles.catDropBtn} ${catsOpen ? styles.catDropBtnOpen : ''}`}
                   onClick={() => setCatsOpen(v => !v)}
                 >
-                  <span>☰ Категории</span>
+                  <span>☰</span><span className={styles.catBtnLabel}> Категории</span>
                   <span className={styles.catDropArrow}>{catsOpen ? '▲' : '▼'}</span>
                 </button>
                 {catsOpen && (
