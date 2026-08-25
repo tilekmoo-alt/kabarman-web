@@ -40,9 +40,25 @@
 
 /* Search row (кнопка категорий + поиск) */
 .searchRow {
-  display: flex; align-items: flex-start; gap: 10px;
+  display: flex; align-items: flex-start;
   max-width: 600px;
   position: relative; z-index: 10;
+}
+
+/* Единый блок поиска */
+.searchCombined {
+  display: flex; align-items: center;
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  overflow: visible;
+  position: relative;
+}
+
+.searchDivider {
+  width: 1px; height: 24px;
+  background: #e0e0e0; flex-shrink: 0;
 }
 
 /* Категории dropdown */
@@ -50,14 +66,13 @@
 
 .catDropBtn {
   display: flex; align-items: center; gap: 8px;
-  background: white; border: none;
-  border-radius: 12px; padding: 14px 16px;
+  background: transparent; border: none;
+  border-radius: 12px 0 0 12px; padding: 14px 16px;
   font-size: 14px; font-weight: 600; color: var(--dark);
   cursor: pointer; white-space: nowrap;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   transition: background 0.15s;
 }
-.catDropBtn:hover { background: #f5f5f5; }
+.catDropBtn:hover { background: rgba(0,0,0,0.04); }
 .catDropBtnOpen { background: #f0faf6; }
 .catDropArrow { font-size: 10px; color: #888; }
 
@@ -88,11 +103,10 @@
 /* Search */
 .searchBox {
   flex: 1; display: flex; gap: 0;
-  background: white; border-radius: 12px;
+  background: transparent;
+  border-radius: 0 12px 12px 0;
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   margin-bottom: 0;
-  position: relative; z-index: 2;
 }
 .searchInput {
   flex: 1; border: none; outline: none;
@@ -257,11 +271,9 @@
   .actionsSection { padding: 10px 0 0; }
   .recentGrid { grid-template-columns: repeat(2, 1fr); }
   .section { padding-top: 14px !important; }
-  .searchRow { flex-direction: row; gap: 8px; max-width: 100%; }
-  .catDropWrap { width: auto; flex-shrink: 0; }
-  .catDropBtn { width: auto; padding: 11px 12px; font-size: 13px; }
+  .searchRow { max-width: 100%; }
+  .catDropBtn { padding: 11px 12px; font-size: 13px; }
   .catDropMenu { min-width: 200px; }
-  .searchBox { flex: 1; }
 }
 @media (max-width: 480px) {
   .hero { padding: 12px 0 14px; }

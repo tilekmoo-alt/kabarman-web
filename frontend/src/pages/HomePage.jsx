@@ -67,51 +67,54 @@ export default function HomePage() {
           <div className={styles.heroContent}>
             <div className={styles.heroTag}>🇰🇬 Кыргызстан</div>
             <h1 className={styles.heroTitle}>
-              Покупай, продавай<br/>
-              <span>и находи услуги</span>
+              Покупай. Продавай. Находи.
             </h1>
             <p className={styles.heroSub}>
               Объявления о товарах и справочник бизнеса — всё в одном месте
             </p>
 
             <div className={styles.searchRow}>
-              {/* Кнопка категорий */}
-              <div className={styles.catDropWrap} ref={catsRef}>
-                <button
-                  type="button"
-                  className={`${styles.catDropBtn} ${catsOpen ? styles.catDropBtnOpen : ''}`}
-                  onClick={() => setCatsOpen(v => !v)}
-                >
-                  <span>☰</span><span className={styles.catBtnLabel}> Категории</span>
-                  <span className={styles.catDropArrow}>{catsOpen ? '▲' : '▼'}</span>
-                </button>
-                {catsOpen && (
-                  <div className={styles.catDropMenu}>
-                    {LISTING_CATS.map(c => (
-                      <button
-                        key={c.name}
-                        type="button"
-                        className={styles.catDropItem}
-                        onClick={() => handleCatClick(c.name)}
-                      >
-                        <span>{c.emoji}</span>
-                        <span>{c.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <div className={styles.searchCombined} ref={catsRef}>
+                {/* Кнопка категорий */}
+                <div className={styles.catDropWrap}>
+                  <button
+                    type="button"
+                    className={`${styles.catDropBtn} ${catsOpen ? styles.catDropBtnOpen : ''}`}
+                    onClick={() => setCatsOpen(v => !v)}
+                  >
+                    <span>☰</span><span className={styles.catBtnLabel}> Категории</span>
+                    <span className={styles.catDropArrow}>{catsOpen ? '▲' : '▼'}</span>
+                  </button>
+                  {catsOpen && (
+                    <div className={styles.catDropMenu}>
+                      {LISTING_CATS.map(c => (
+                        <button
+                          key={c.name}
+                          type="button"
+                          className={styles.catDropItem}
+                          onClick={() => handleCatClick(c.name)}
+                        >
+                          <span>{c.emoji}</span>
+                          <span>{c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-              {/* Строка поиска */}
-              <form onSubmit={handleSearch} className={styles.searchBox}>
-                <input
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Что ищете?"
-                  className={styles.searchInput}
-                />
-                <button type="submit" className={styles.searchBtn}>🔍 Найти</button>
-              </form>
+                <div className={styles.searchDivider} />
+
+                {/* Строка поиска */}
+                <form onSubmit={handleSearch} className={styles.searchBox}>
+                  <input
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Что ищете?"
+                    className={styles.searchInput}
+                  />
+                  <button type="submit" className={styles.searchBtn}>🔍 Найти</button>
+                </form>
+              </div>
             </div>
           </div>
           <div className={styles.heroLogo}>
