@@ -148,17 +148,25 @@ export default function ListingsPage() {
         </div>
 
         <form onSubmit={handleSearch} className={styles.searchRow}>
+          <select
+            value={category}
+            onChange={e => setFilter('category', e.target.value)}
+            className={`form-select ${styles.searchCatSelect}`}
+          >
+            <option value="">Все категории</option>
+            {CATS.map(c => <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>)}
+          </select>
           <input
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
             placeholder="Поиск по объявлениям..."
             className={`form-input ${styles.searchInput}`}
           />
-          <button type="submit" className="btn btn-primary">🔍 Найти</button>
-          {q && (
+          <button type="submit" className="btn btn-primary">🔍</button>
+          {(q || category) && (
             <button type="button" className="btn btn-outline btn-sm"
-              onClick={() => { setSearchInput(''); setFilter('q', '') }}>
-              ✕ Сбросить
+              onClick={() => { setSearchInput(''); setParams({}) }}>
+              ✕
             </button>
           )}
         </form>

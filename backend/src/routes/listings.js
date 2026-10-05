@@ -195,8 +195,8 @@ router.post('/', async (req, res) => {
       INSERT INTO listings (
         title, description, price, is_negotiable, photos,
         category, oblast_id, district_id,
-        contact_name, contact_phone, tg_username, source
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'web')
+        contact_name, contact_phone, tg_username, source, expires_at
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'web', NOW() + INTERVAL '30 days')
       RETURNING *
     `, [
       title,

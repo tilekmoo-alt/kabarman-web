@@ -29,7 +29,8 @@ const STEPS = ['Категория', 'Регион', 'Объявление', 'Ф
 export default function NewListingPage() {
   const { oblasts, districts } = useContext(AppContext)
   const navigate = useNavigate()
-  const fileRef = useRef()
+  const fileRef    = useRef()
+  const cameraRef  = useRef()
 
   const [step, setStep]       = useState(0)
   const [error, setError]     = useState('')
@@ -188,18 +189,37 @@ export default function NewListingPage() {
                     {form.photos.map((url, i) => (
                       <div key={i} className={listStyles.photoThumb}>
                         <img src={url} alt="" />
-                        <button type="button" onClick={() => set('photos', form.photos.filter((_, j) => j !== i))}>✕</button>
+                        {i === 0 && <div className={listStyles.photoBadge}>Главное</div>}
+                        {i > 0 && (
+                          <button type="button" className={listStyles.photoMainBtn}
+                            title="Сделать главным"
+                            onClick={() => {
+                              const arr = [...form.photos]
+                              arr.splice(i, 1)
+                              set('photos', [url, ...arr])
+                            }}>⭐</button>
+                        )}
+                        <button type="button" className={listStyles.photoDeleteBtn}
+                          onClick={() => set('photos', form.photos.filter((_, j) => j !== i))}>✕</button>
                       </div>
                     ))}
-                    {form.photos.length < 5 && (
-                      <button type="button" className={listStyles.photoAdd}
-                        onClick={() => fileRef.current?.click()}
-                        disabled={uploading}>
-                        {uploading ? '⏳' : '+ Фото'}
-                      </button>
+                    {form.photos.length < 5 && !uploading && (
+                      <>
+                        <button type="button" className={listStyles.photoAdd}
+                          onClick={() => cameraRef.current?.click()}>
+                          📷 Камера
+                        </button>
+                        <button type="button" className={listStyles.photoAdd}
+                          onClick={() => fileRef.current?.click()}>
+                          🖼 Галерея
+                        </button>
+                      </>
                     )}
+                    {uploading && <div className={listStyles.photoAdd} style={{display:'flex',alignItems:'center',justifyContent:'center'}}>⏳</div>}
                   </div>
                   <input ref={fileRef} type="file" accept="image/*" multiple hidden
+                    onChange={e => handleFiles(e.target.files)} />
+                  <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden
                     onChange={e => handleFiles(e.target.files)} />
                 </div>
                 <div className="form-group">

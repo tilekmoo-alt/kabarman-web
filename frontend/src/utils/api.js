@@ -28,7 +28,8 @@ export const listingsApi = {
   getMine:      ()          => api.get('/listings/mine'),
   deleteMine:   (id)        => api.delete(`/listings/${id}/mine`),
   uploadPhotos: (formData)  => api.post('/listings/photos', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 60000
   })
 }
 

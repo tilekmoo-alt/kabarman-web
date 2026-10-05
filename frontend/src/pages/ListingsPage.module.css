@@ -16,8 +16,10 @@
   gap: 8px;
   margin-bottom: 16px;
   align-items: center;
+  flex-wrap: wrap;
 }
-.searchInput { flex: 1; }
+.searchInput { flex: 1; min-width: 120px; }
+.searchCatSelect { flex: 0 0 auto; max-width: 160px; }
 
 .catRow {
   display: flex;
