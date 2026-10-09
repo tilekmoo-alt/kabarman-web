@@ -60,8 +60,11 @@ export default function Layout() {
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
             <div className={styles.headerBtns}>
-              <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
-                📱 Скачать
+              <Link to="/listings/new" className={`btn btn-primary btn-sm ${styles.postBtn}`}>
+                +<span className={styles.postBtnText}> Подать</span>
+              </Link>
+              <button className={`btn btn-outline btn-sm ${styles.dlBtn}`} onClick={() => setShowInstall(true)}>
+                📱<span className={styles.dlBtnText}> Скачать</span>
               </button>
             </div>
           </div>

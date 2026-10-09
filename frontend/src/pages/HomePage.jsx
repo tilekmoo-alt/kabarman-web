@@ -65,7 +65,7 @@ export default function HomePage() {
       <section className={styles.hero}>
         <div className="container">
           <div className={styles.heroContent}>
-            <div className={styles.heroTag}>🇰🇬 Кыргызстан</div>
+            <div className={styles.heroTag}>Кыргызстан</div>
             <h1 className={styles.heroTitle}>
               Покупай. Продавай. Находи.
             </h1>
@@ -116,9 +116,6 @@ export default function HomePage() {
                 </form>
               </div>
             </div>
-          </div>
-          <div className={styles.heroLogo}>
-            <img src="/logo-icon.png" alt="Kabarman" className={styles.heroLogoImg} />
           </div>
         </div>
       </section>

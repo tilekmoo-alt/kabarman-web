@@ -116,13 +116,13 @@
 }
 .searchInput::placeholder { color: #aaa; }
 .searchBtn {
-  background: var(--green); color: white;
+  background: var(--gold); color: white;
   border: none; padding: 14px 22px;
   font-size: 14px; font-weight: 600;
   cursor: pointer; white-space: nowrap;
   transition: background 0.15s;
 }
-.searchBtn:hover { background: var(--green-dark, #0f5c45); }
+.searchBtn:hover { background: #a37722; }
 
 .heroLogo {
   flex: 0 0 220px;
@@ -147,16 +147,16 @@
 }
 .actionCard {
   display: flex; align-items: center; gap: 16px;
-  background: white; border: 2px solid #C0392B;
+  background: white; border: 2px solid var(--green);
   border-radius: 16px; padding: 22px 24px;
   text-decoration: none; color: var(--dark);
   transition: all 0.2s;
 }
 .actionCard:hover {
-  border-color: #a93226;
-  box-shadow: 0 4px 20px rgba(192,57,43,0.15);
+  border-color: var(--green-light);
+  box-shadow: 0 4px 20px rgba(26,122,94,0.15);
   transform: translateY(-2px);
-  background: #fdf9f9;
+  background: var(--green-pale);
 }
 .actionCardAlt { border-color: #e8f4f0; background: #f9fdfb; }
 .actionCardAlt:hover { border-color: var(--green); background: white; }
@@ -278,6 +278,7 @@
 @media (max-width: 480px) {
   .hero { padding: 12px 0 14px; }
   .heroTitle { font-size: 17px; margin-bottom: 8px; }
+  .sectionTitle { font-size: 16px; }
   .catBtnLabel { display: none; }
   .catDropBtn { padding: 10px 10px; }
   .searchBox { border-radius: 10px; }
