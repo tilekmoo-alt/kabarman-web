@@ -2,49 +2,35 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './Layout.module.css'
 
-function InstallModal({ onClose, deferredPrompt, onInstalled }) {
-  const [androidDone, setAndroidDone] = useState(false)
-
-  const handleAndroidInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt()
-      const { outcome } = await deferredPrompt.userChoice
-      if (outcome === 'accepted') { onInstalled(); onClose() }
-    } else {
-      setAndroidDone(true)
-    }
-  }
-
+function InstallModal({ onClose }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <button className={styles.modalClose} onClick={onClose}>✕</button>
-        <div className={styles.modalIcon}>📲</div>
-        <h2 className={styles.modalTitle}>Установить Кабарман</h2>
+        <div className={styles.modalIcon}>📱</div>
+        <h2 className={styles.modalTitle}>Скачать Кабарман</h2>
+        <p className={styles.modalSub}>Бесплатное приложение для объявлений и услуг Кыргызстана</p>
 
-        <div className={styles.modalPlatform}>
-          <div className={styles.platformLabel}>🤖 Для Android</div>
-          {!androidDone ? (
-            <button className={styles.modalBtn} onClick={handleAndroidInstall}>
-              Установить приложение
-            </button>
-          ) : (
-            <div className={styles.iosSteps}>
-              <div className={styles.iosStep}><span className={styles.stepNum}>1</span><span>Откройте сайт в браузере <b>Chrome</b></span></div>
-              <div className={styles.iosStep}><span className={styles.stepNum}>2</span><span>Нажмите <b>⋮</b> (три точки) справа вверху</span></div>
-              <div className={styles.iosStep}><span className={styles.stepNum}>3</span><span>Выберите <b>«Добавить на главный экран»</b></span></div>
+        <div className={styles.storeBadges}>
+          <a
+            href="https://play.google.com/store/apps/details?id=kg.kabarman.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.storeBadge}
+          >
+            <div className={styles.storeBadgeIcon}>🤖</div>
+            <div className={styles.storeBadgeText}>
+              <div className={styles.storeBadgeLabel}>Скачать в</div>
+              <div className={styles.storeBadgeName}>Google Play</div>
             </div>
-          )}
-        </div>
+          </a>
 
-        <div className={styles.modalDivider} />
-
-        <div className={styles.modalPlatform}>
-          <div className={styles.platformLabel}>🍎 Для iPhone</div>
-          <div className={styles.iosSteps}>
-            <div className={styles.iosStep}><span className={styles.stepNum}>1</span><span>Откройте сайт в браузере <b>Safari</b></span></div>
-            <div className={styles.iosStep}><span className={styles.stepNum}>2</span><span>Нажмите кнопку <b>↑</b> («Поделиться») внизу экрана</span></div>
-            <div className={styles.iosStep}><span className={styles.stepNum}>3</span><span>Выберите <b>«На экран "Домой"»</b> и нажмите <b>«Добавить»</b></span></div>
+          <div className={`${styles.storeBadge} ${styles.storeBadgeSoon}`}>
+            <div className={styles.storeBadgeIcon}>🍎</div>
+            <div className={styles.storeBadgeText}>
+              <div className={styles.storeBadgeLabel}>Скоро в</div>
+              <div className={styles.storeBadgeName}>App Store</div>
+            </div>
           </div>
         </div>
 
@@ -58,14 +44,7 @@ export default function Layout() {
   const loc = useLocation()
   const navigate = useNavigate()
   const [showInstall, setShowInstall] = useState(false)
-  const [deferredPrompt, setDeferredPrompt] = useState(null)
   const isHome = loc.pathname === '/'
-
-  useEffect(() => {
-    const handler = (e) => { e.preventDefault(); setDeferredPrompt(e) }
-    window.addEventListener('beforeinstallprompt', handler)
-    return () => window.removeEventListener('beforeinstallprompt', handler)
-  }, [])
 
   return (
     <div className={styles.app}>
@@ -87,7 +66,7 @@ export default function Layout() {
             </nav>
             <div className={styles.headerBtns}>
               <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
-                📲 Установить
+                📱 Скачать
               </button>
             </div>
           </div>
@@ -95,11 +74,7 @@ export default function Layout() {
       </header>
 
       {showInstall && (
-        <InstallModal
-          onClose={() => setShowInstall(false)}
-          deferredPrompt={deferredPrompt}
-          onInstalled={() => setDeferredPrompt(null)}
-        />
+        <InstallModal onClose={() => setShowInstall(false)} />
       )}
 
       <main className={styles.main}>
