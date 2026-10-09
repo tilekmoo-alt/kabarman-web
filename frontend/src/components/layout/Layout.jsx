@@ -16,16 +16,11 @@ function InstallModal({ onClose }) {
             href="https://play.google.com/store/apps/details?id=kg.kabarman.app"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.storeBadge}
           >
-            <div className={styles.storeBadgeIcon}>🤖</div>
-            <div className={styles.storeBadgeText}>
-              <div className={styles.storeBadgeLabel}>Скачать в</div>
-              <div className={styles.storeBadgeName}>Google Play</div>
-            </div>
+            <img src="/google-play-badge.webp" alt="Get it on Google Play" className={styles.storeBadgeImg} />
           </a>
 
-          <div className={`${styles.storeBadge} ${styles.storeBadgeSoon}`}>
+          <div className={styles.storeBadgeSoon}>
             <div className={styles.storeBadgeIcon}>🍎</div>
             <div className={styles.storeBadgeText}>
               <div className={styles.storeBadgeLabel}>Скоро в</div>

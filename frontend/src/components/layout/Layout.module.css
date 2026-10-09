@@ -202,20 +202,19 @@
 
 .modalSub { color: var(--gray); font-size: 14px; margin: -8px 0 24px; text-align: center; line-height: 1.5; }
 
-.storeBadges { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-.storeBadge {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--dark); color: white;
-  border-radius: 12px; padding: 12px 20px;
-  text-decoration: none; min-width: 160px;
-  transition: opacity 0.15s;
+.storeBadges { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; align-items: center; }
+.storeBadgeImg { height: 56px; display: block; transition: opacity 0.15s; }
+.storeBadgeImg:hover { opacity: 0.85; }
+.storeBadgeSoon {
+  display: flex; align-items: center; gap: 10px;
+  background: #ccc; color: #666;
+  border-radius: 10px; padding: 10px 18px;
+  height: 56px; box-sizing: border-box;
+  cursor: default;
 }
-.storeBadge:hover { opacity: 0.85; }
-.storeBadgeSoon { background: #aaa; cursor: default; }
-.storeBadgeSoon:hover { opacity: 1; }
-.storeBadgeIcon { font-size: 28px; }
-.storeBadgeLabel { font-size: 11px; opacity: 0.8; }
-.storeBadgeName { font-size: 17px; font-weight: 700; }
+.storeBadgeIcon { font-size: 24px; }
+.storeBadgeLabel { font-size: 10px; }
+.storeBadgeName { font-size: 15px; font-weight: 700; }
 
 @media (max-width: 768px) {
   .nav { display: none; }
