@@ -222,5 +222,6 @@
   .footerLinks { grid-template-columns: 1fr 1fr; }
   .headerBtns { gap: 6px; }
   .headerBtns .btn { font-size: 14px; padding: 8px 12px; }
+  .logo span { display: none; }
 }
 .footerCol span { white-space: nowrap; }
