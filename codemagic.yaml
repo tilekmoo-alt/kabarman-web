@@ -24,7 +24,21 @@ workflows:
           cd frontend
           npx cap add ios || true
           npx cap sync ios
-          sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = DVR5F9DX62;/g' ios/App/App.xcodeproj/project.pbxproj
+          echo "=== DEVELOPMENT_TEAM before fix ==="
+          grep "DEVELOPMENT_TEAM" ios/App/App.xcodeproj/project.pbxproj || echo "not found"
+          python3 -c "
+import re
+with open('ios/App/App.xcodeproj/project.pbxproj', 'r') as f:
+    content = f.read()
+content = re.sub(r'DEVELOPMENT_TEAM = [^;]*;', 'DEVELOPMENT_TEAM = DVR5F9DX62;', content)
+if 'DEVELOPMENT_TEAM' not in content:
+    content = content.replace('CODE_SIGN_STYLE = Automatic;', 'CODE_SIGN_STYLE = Automatic;\n\t\t\t\tDEVELOPMENT_TEAM = DVR5F9DX62;')
+with open('ios/App/App.xcodeproj/project.pbxproj', 'w') as f:
+    f.write(content)
+print('Done')
+"
+          echo "=== DEVELOPMENT_TEAM after fix ==="
+          grep "DEVELOPMENT_TEAM" ios/App/App.xcodeproj/project.pbxproj || echo "still not found"
 
       - name: Set up code signing
         script: |
