@@ -6,9 +6,6 @@ workflows:
     environment:
       groups:
         - app-store-connect
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: kg.kabarman.app
       node: v20
     scripts:
       - name: Install frontend dependencies
@@ -30,12 +27,46 @@ workflows:
 
       - name: Build IPA
         script: |
-          xcode-project build-ipa \
-            --workspace "frontend/ios/App/App.xcworkspace" \
-            --scheme "App"
+          echo "$APP_STORE_CONNECT_PRIVATE_KEY" > /tmp/AuthKey.p8
+
+          cat > /tmp/ExportOptions.plist << 'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>teamID</key>
+            <string>DVR5F9DX62</string>
+          </dict>
+          </plist>
+          PLIST
+
+          xcodebuild \
+            -workspace "frontend/ios/App/App.xcworkspace" \
+            -scheme "App" \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/App.xcarchive" \
+            -authenticationKeyPath "/tmp/AuthKey.p8" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
+            -authenticationKeyIssuerID "$APP_STORE_CONNECT_ISSUER_ID" \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="DVR5F9DX62" \
+            archive
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$CM_BUILD_DIR/App.xcarchive" \
+            -exportOptionsPlist /tmp/ExportOptions.plist \
+            -exportPath "$CM_BUILD_DIR/ipa" \
+            -authenticationKeyPath "/tmp/AuthKey.p8" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
+            -authenticationKeyIssuerID "$APP_STORE_CONNECT_ISSUER_ID" \
+            -allowProvisioningUpdates
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - $CM_BUILD_DIR/ipa/*.ipa
 
     publishing:
       app_store_connect:
