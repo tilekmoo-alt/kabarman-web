@@ -6,6 +6,9 @@ workflows:
     environment:
       groups:
         - app-store-connect
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: kg.kabarman.app
       node: v20
     scripts:
       - name: Install frontend dependencies
@@ -24,15 +27,6 @@ workflows:
           cd frontend
           npx cap add ios || true
           npx cap sync ios
-
-      - name: Set up code signing
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "kg.kabarman.app" \
-            --type IOS_APP_STORE \
-            --create
-          keychain add-certificates
-          xcode-project use-profiles
 
       - name: Build IPA
         script: |
