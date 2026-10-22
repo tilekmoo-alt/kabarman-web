@@ -6,10 +6,6 @@ workflows:
     environment:
       groups:
         - app-store-connect
-      app_store_connect:
-        private_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
       ios_signing:
         distribution_type: app_store
         bundle_identifier: kg.kabarman.app
@@ -33,7 +29,13 @@ workflows:
           npx cap sync ios
 
       - name: Set up code signing
-        script: xcode-project use-profiles
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "kg.kabarman.app" \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+          xcode-project use-profiles
 
       - name: Build IPA
         script: |
