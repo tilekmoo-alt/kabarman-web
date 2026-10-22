@@ -1,0 +1,9 @@
+{
+  "appId": "kg.kabarman.app",
+  "appName": "Kabarman",
+  "webDir": "dist",
+  "server": {
+    "url": "https://kabarman.kg",
+    "cleartext": false
+  }
+}

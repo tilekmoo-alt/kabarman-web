@@ -1,0 +1,46 @@
+workflows:
+  ios-release:
+    name: Kabarman iOS Release
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: kg.kabarman.app
+      node: v20
+    scripts:
+      - name: Install frontend dependencies
+        script: cd frontend && npm ci
+
+      - name: Build web app
+        script: cd frontend && npm run build
+
+      - name: Install Capacitor
+        script: |
+          cd frontend
+          npm install @capacitor/core @capacitor/cli @capacitor/ios
+
+      - name: Add iOS platform
+        script: |
+          cd frontend
+          npx cap add ios || true
+          npx cap sync ios
+
+      - name: Set up code signing
+        script: xcode-project use-profiles
+
+      - name: Build IPA
+        script: |
+          xcode-project build-ipa \
+            --workspace "frontend/ios/App/App.xcworkspace" \
+            --scheme "App"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_app_store: true
