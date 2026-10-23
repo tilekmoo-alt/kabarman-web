@@ -25,6 +25,8 @@ workflows:
           cd frontend
           npx cap add ios || true
           npx cap sync ios
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
           echo "=== DEVELOPMENT_TEAM before sed ==="
           grep -n 'DEVELOPMENT_TEAM\|CODE_SIGN_STYLE' ios/App/App.xcodeproj/project.pbxproj || echo "NOT FOUND"
           sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = DVR5F9DX62;/g' ios/App/App.xcodeproj/project.pbxproj
