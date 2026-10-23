@@ -6,6 +6,7 @@ workflows:
     environment:
       groups:
         - manual-signing
+        - app-store-connect
       node: v20
     scripts:
       - name: Install frontend dependencies
