@@ -4,9 +4,8 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: kg.kabarman.app
+      groups:
+        - app-store-connect
       node: v20
     scripts:
       - name: Install frontend dependencies
@@ -25,6 +24,14 @@ workflows:
           cd frontend
           npx cap add ios || true
           npx cap sync ios
+          python3 -c "f='ios/App/App.xcodeproj/project.pbxproj'; c=open(f).read(); c=c.replace('DEVELOPMENT_TEAM = \"\";', 'DEVELOPMENT_TEAM = DVR5F9DX62;'); open(f,'w').write(c); print('Team count:', c.count('DVR5F9DX62'))"
+
+      - name: Set up code signing
+        script: |
+          app-store-connect fetch-signing-files kg.kabarman.app \
+            --type IOS_APP_STORE \
+            --create
+          xcode-project use-profiles --verbose
 
       - name: Build IPA
         script: |
