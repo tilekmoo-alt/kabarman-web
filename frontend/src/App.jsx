@@ -3,13 +3,11 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 
 async function initPushNotifications() {
   try {
-    const { Capacitor } = await import(/* @vite-ignore */ '@capacitor/core')
-    if (Capacitor.getPlatform() !== 'ios') return
-    const { PushNotifications } = await import(/* @vite-ignore */ '@capacitor/push-notifications')
-    const perm = await PushNotifications.requestPermissions()
-    if (perm.receive === 'granted') {
-      await PushNotifications.register()
-    }
+    if (window.Capacitor?.getPlatform() !== 'ios') return
+    const push = window.Capacitor?.Plugins?.PushNotifications
+    if (!push) return
+    const perm = await push.requestPermissions()
+    if (perm.receive === 'granted') await push.register()
   } catch (_) {}
 }
 

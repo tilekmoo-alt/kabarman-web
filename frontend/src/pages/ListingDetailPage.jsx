@@ -23,10 +23,8 @@ export default function ListingDetailPage() {
       url: `https://kabarman.kg/listings/${listing.id}`,
     }
     try {
-      const { Capacitor } = await import(/* @vite-ignore */ '@capacitor/core')
-      if (Capacitor.isNativePlatform()) {
-        const { Share } = await import(/* @vite-ignore */ '@capacitor/share')
-        await Share.share(shareData)
+      if (window.Capacitor?.isNativePlatform()) {
+        await window.Capacitor.Plugins.Share.share(shareData)
         return
       }
     } catch (_) {}
