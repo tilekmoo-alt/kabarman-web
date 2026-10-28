@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
+async function initPushNotifications() {
+  try {
+    const { Capacitor } = await import('@capacitor/core')
+    if (Capacitor.getPlatform() !== 'ios') return
+    const { PushNotifications } = await import('@capacitor/push-notifications')
+    const perm = await PushNotifications.requestPermissions()
+    if (perm.receive === 'granted') {
+      await PushNotifications.register()
+    }
+  } catch (_) {}
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -29,6 +41,7 @@ export default function App() {
     catalogApi.getCategories().then(r => setCategories(r.data)).catch(() => {})
     catalogApi.getOblasts().then(r => setOblasts(r.data)).catch(() => {})
     catalogApi.getDistricts().then(r => setDistricts(r.data)).catch(() => {})
+    initPushNotifications()
   }, [])
 
   return (

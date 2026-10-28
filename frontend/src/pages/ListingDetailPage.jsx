@@ -16,6 +16,23 @@ export default function ListingDetailPage() {
     setReported(true)
   }
 
+  const handleShare = async () => {
+    const shareData = {
+      title: listing.title,
+      text: `${listing.title} — ${listing.price ? Number(listing.price).toLocaleString('ru') + ' сом' : 'Договорная'}`,
+      url: `https://kabarman.kg/listings/${listing.id}`,
+    }
+    try {
+      const { Capacitor } = await import('@capacitor/core')
+      if (Capacitor.isNativePlatform()) {
+        const { Share } = await import('@capacitor/share')
+        await Share.share(shareData)
+        return
+      }
+    } catch (_) {}
+    if (navigator.share) navigator.share(shareData).catch(() => {})
+  }
+
   useEffect(() => {
     listingsApi.getOne(id)
       .then(r => setListing(r.data))
@@ -123,6 +140,9 @@ export default function ListingDetailPage() {
               <a href={`tel:${listing.contact_phone}`} className="btn btn-outline">
                 📞 Позвонить
               </a>
+              <button onClick={handleShare} className="btn btn-outline">
+                ↑ Поделиться
+              </button>
             </div>
 
             <div className={styles.date}>
