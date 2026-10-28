@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './Layout.module.css'
 
-const isNativeIOS = typeof window !== 'undefined' && window.Capacitor?.getPlatform() === 'ios'
+const getIsNativeIOS = () => typeof window !== 'undefined' && window.Capacitor?.getPlatform() === 'ios'
 
 function InstallModal({ onClose }) {
+  const isNativeIOS = getIsNativeIOS()
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
@@ -43,6 +44,7 @@ export default function Layout() {
   const loc = useLocation()
   const navigate = useNavigate()
   const [showInstall, setShowInstall] = useState(false)
+  const isNativeIOS = getIsNativeIOS()
   const isHome = loc.pathname === '/'
 
   return (

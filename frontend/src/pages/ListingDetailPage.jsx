@@ -23,9 +23,9 @@ export default function ListingDetailPage() {
       url: `https://kabarman.kg/listings/${listing.id}`,
     }
     try {
-      const { Capacitor } = await import('@capacitor/core')
+      const { Capacitor } = await import(/* @vite-ignore */ '@capacitor/core')
       if (Capacitor.isNativePlatform()) {
-        const { Share } = await import('@capacitor/share')
+        const { Share } = await import(/* @vite-ignore */ '@capacitor/share')
         await Share.share(shareData)
         return
       }
