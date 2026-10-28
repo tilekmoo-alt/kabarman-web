@@ -19,11 +19,13 @@ workflows:
         script: |
           cd frontend
           npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/ios@6
+          npm install @capacitor/assets --save-dev
 
       - name: Add iOS platform
         script: |
           cd frontend
           npx cap add ios || true
+          npx capacitor-assets generate --ios
           npx cap sync ios
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist 2>/dev/null || \
             /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist

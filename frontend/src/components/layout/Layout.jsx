@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './Layout.module.css'
 
+const isNativeIOS = typeof window !== 'undefined' && window.Capacitor?.getPlatform() === 'ios'
+
 function InstallModal({ onClose }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -12,13 +14,15 @@ function InstallModal({ onClose }) {
         <p className={styles.modalSub}>Бесплатное приложение для объявлений и услуг Кыргызстана</p>
 
         <div className={styles.storeBadges}>
-          <a
-            href="https://play.google.com/store/apps/details?id=kg.kabarman.app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/google-play-badge.webp" alt="Get it on Google Play" className={styles.storeBadgeImg} />
-          </a>
+          {!isNativeIOS && (
+            <a
+              href="https://play.google.com/store/apps/details?id=kg.kabarman.app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/google-play-badge.webp" alt="Get it on Google Play" className={styles.storeBadgeImg} />
+            </a>
+          )}
 
           <div className={styles.storeBadgeSoon}>
             <div className={styles.storeBadgeIcon}>🍎</div>
@@ -59,11 +63,13 @@ export default function Layout() {
               <Link to="/listings" className={loc.pathname.startsWith('/listings') ? styles.active : ''}>Объявления</Link>
               <Link to="/search"   className={loc.pathname === '/search'           ? styles.active : ''}>Поиск</Link>
             </nav>
-            <div className={styles.headerBtns}>
-              <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
-                📱 Скачать
-              </button>
-            </div>
+            {!isNativeIOS && (
+              <div className={styles.headerBtns}>
+                <button className="btn btn-primary btn-sm" onClick={() => setShowInstall(true)}>
+                  📱 Скачать
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>
