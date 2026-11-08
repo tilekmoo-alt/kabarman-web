@@ -75,6 +75,26 @@ export default function NewListingPage() {
     }
   }
 
+  const handleNativePhoto = async (source) => {
+    try {
+      if (window.Capacitor?.isNativePlatform() && window.Capacitor?.Plugins?.Camera) {
+        const image = await window.Capacitor.Plugins.Camera.getPhoto({
+          quality: 85,
+          allowEditing: false,
+          resultType: 'dataUrl',
+          source: source === 'camera' ? 'CAMERA' : 'PHOTOS',
+        })
+        const res = await fetch(image.dataUrl)
+        const blob = await res.blob()
+        const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' })
+        await handleFiles([file])
+        return
+      }
+    } catch (_) {}
+    if (source === 'camera') cameraRef.current?.click()
+    else fileRef.current?.click()
+  }
+
   const submit = async () => {
     if (!form.contact_phone) { setError('Введите номер телефона'); return }
     setLoading(true); setError('')
@@ -206,11 +226,11 @@ export default function NewListingPage() {
                     {form.photos.length < 5 && !uploading && (
                       <>
                         <button type="button" className={listStyles.photoAdd}
-                          onClick={() => cameraRef.current?.click()}>
+                          onClick={() => handleNativePhoto('camera')}>
                           📷 Камера
                         </button>
                         <button type="button" className={listStyles.photoAdd}
-                          onClick={() => fileRef.current?.click()}>
+                          onClick={() => handleNativePhoto('gallery')}>
                           🖼 Галерея
                         </button>
                       </>

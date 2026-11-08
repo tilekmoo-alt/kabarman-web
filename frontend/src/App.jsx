@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
+async function initLocation() {
+  try {
+    if (window.Capacitor?.getPlatform() !== 'ios') return
+    const geo = window.Capacitor?.Plugins?.Geolocation
+    if (!geo) return
+    await geo.requestPermissions()
+  } catch (_) {}
+}
+
 async function initPushNotifications() {
   try {
     if (window.Capacitor?.getPlatform() !== 'ios') return
@@ -40,6 +49,7 @@ export default function App() {
     catalogApi.getOblasts().then(r => setOblasts(r.data)).catch(() => {})
     catalogApi.getDistricts().then(r => setDistricts(r.data)).catch(() => {})
     initPushNotifications()
+    initLocation()
   }, [])
 
   return (

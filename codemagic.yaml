@@ -18,7 +18,7 @@ workflows:
       - name: Install Capacitor
         script: |
           cd frontend
-          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/ios@6 @capacitor/push-notifications@6 @capacitor/share@6
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/ios@6 @capacitor/push-notifications@6 @capacitor/share@6 @capacitor/camera@6 @capacitor/geolocation@6
           npm install @capacitor/assets --save-dev
 
       - name: Add iOS platform
@@ -29,6 +29,9 @@ workflows:
           npx cap sync ios
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist 2>/dev/null || \
             /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Для съёмки фото при подаче объявления'" ios/App/App/Info.plist 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Для выбора фото из галереи при подаче объявления'" ios/App/App/Info.plist 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :NSLocationWhenInUseUsageDescription string 'Для показа объявлений рядом с вами'" ios/App/App/Info.plist 2>/dev/null || true
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" ios/App/App/Info.plist
           echo "Build number set to: $BUILD_NUMBER"
           echo "=== DEVELOPMENT_TEAM before sed ==="
