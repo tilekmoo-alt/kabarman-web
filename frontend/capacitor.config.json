@@ -3,7 +3,8 @@
   "appName": "Kabarman",
   "webDir": "dist",
   "server": {
-    "url": "https://kabarman.kg",
-    "cleartext": false
+    "hostname": "kabarman.kg",
+    "iosScheme": "https",
+    "androidScheme": "https"
   }
 }
