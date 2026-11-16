@@ -7,7 +7,6 @@ workflows:
       groups:
         - manual-signing
         - app-store-connect
-      xcode: 16.3
       node: v20
     scripts:
       - name: Install frontend dependencies
