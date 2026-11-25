@@ -58,8 +58,8 @@ export default function Layout() {
               </button>
             )}
             <Link to="/" className={styles.logo}>
-              <img src="/logo-icon.png" alt="Kabarman" className={styles.logoImg} />
-              <span>KABARMAN</span>
+              <img src="/logo-icon.png" alt="Teztap" className={styles.logoImg} />
+              <span>TEZTAP</span>
             </Link>
             <nav className={styles.nav}>
               <Link to="/listings" className={loc.pathname.startsWith('/listings') ? styles.active : ''}>Объявления</Link>
@@ -89,8 +89,8 @@ export default function Layout() {
           <div className={styles.footerInner}>
             <div className={styles.footerBrand}>
               <div className={styles.footerLogo}>
-                <img src="/logo-icon.png" alt="Kabarman" className={styles.footerLogoImg} />
-                <span>KABARMAN</span>
+                <img src="/logo-icon.png" alt="Teztap" className={styles.footerLogoImg} />
+                <span>TEZTAP</span>
               </div>
               <p>Объявления и услуги<br/>Кыргызстана</p>
             </div>
